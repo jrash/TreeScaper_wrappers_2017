@@ -1,0 +1,11 @@
+begin paup;
+	set nowarnreset autoclose;
+	execute /Users/jeremyash/Documents/BrownLabJash/RougeTaxaSimulation/Script/1000bp.01L/SimSeqs/Tree.cat.seqs.nex;
+	set increase=auto;
+	gettrees file=Tree.cat.seqs.nex.run1.t mode=7  storebrlens =yes from=26 to=101;
+	gettrees file=Tree.cat.seqs.nex.run2.t mode=7  storebrlens =yes from=26 to=101;
+	gettrees file=Tree.cat.seqs.nex.run3.t mode=7  storebrlens =yes from=26 to=101;
+	gettrees file=Tree.cat.seqs.nex.run4.t mode=7  storebrlens =yes from=26 to=101;
+	gettrees file=Tree.cat.seqs.nex.run5.t mode=7  storebrlens =yes from=26 to=101;
+	Savetrees FMT=NEXUS FILE=Tree.cat.seqs.nex.burn.t brlens=user replace;
+	quit;

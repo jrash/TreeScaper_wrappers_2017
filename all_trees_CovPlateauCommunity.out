@@ -1,0 +1,55 @@
+loading all parameters
+unweighted rooted trees
+Successfully read 100 trees from file: all_trees.nex.
+Unique bipartition number: 19
+Translation of taxa:
+taxon_1 , 1
+taxon_2 , 2
+taxon_3 , 3
+taxon_4 , 4
+taxon_5 , 5
+taxon_6 , 6
+taxon_7 , 7
+taxon_8 , 8
+taxon_9 , 9
+taxon_10 , 10
+taxon_11 , 11
+taxon_12 , 12
+taxon_13 , 13
+taxon_14 , 14
+taxon_15 , 15
+taxon_16 , 16
+bipartition 1 : 0011111111111111, appear times: 100
+bipartition 2 : 0000000000000011, appear times: 67
+bipartition 3 : 0000000000001100, appear times: 100
+bipartition 4 : 0000111100000000, appear times: 36
+bipartition 5 : 0011000000000000, appear times: 100
+bipartition 6 : 0000000000001111, appear times: 61
+bipartition 7 : 0000100011111111, appear times: 64
+bipartition 8 : 0000000000110000, appear times: 100
+bipartition 9 : 0000000011000000, appear times: 100
+bipartition 10 : 0000100000000010, appear times: 33
+bipartition 11 : 0000110000000000, appear times: 26
+bipartition 12 : 0000000011110000, appear times: 100
+bipartition 13 : 0000100000000011, appear times: 37
+bipartition 14 : 0000001100000000, appear times: 100
+bipartition 15 : 0000011100000000, appear times: 74
+bipartition 16 : 0000000011111100, appear times: 2
+bipartition 17 : 0000100000001111, appear times: 37
+bipartition 18 : 0000000011111111, appear times: 63
+bipartition 19 : 0000111111111111, appear times: 100
+successfully computed bipartitation matrix.
+Output bipartition matrix in list format to all_trees_unweighted_bipartition.out
+Successfully computed covariance matrix of bipartition.
+Successfully printed Covariance Matrix matrix!
+Using lambda+ 0.06, lambda- 1
+network has 10 nodes, 100 links, 
+Value of modularity:5.72671
+Number of communities: 1
+Community 1 includes nodes: 1,3,5,6,9,10,12,14,16,17,
+Free node index:
+0, 2, 4, 7, 8, 11, 13, 15, 18, 
+Output community results to file: all_trees_Covariance Matrix_community_results.out
+Successfully detected communities of Covariance Matrix by model: CPM with high freq. bound:.95, low freq. bound:.05!
+Lambda positive: {1: 0.06, }
+Lambda negative: {1: 1, }

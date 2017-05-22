@@ -1,0 +1,61 @@
+loading all parameters
+unweighted unrooted trees
+Successfully read 100 trees from file: all_trees.nex.
+Unique bipartition number: 19
+Translation of taxa:
+taxon_1 , 1
+taxon_2 , 2
+taxon_3 , 3
+taxon_4 , 4
+taxon_5 , 5
+taxon_6 , 6
+taxon_7 , 7
+taxon_8 , 8
+taxon_9 , 9
+taxon_10 , 10
+taxon_11 , 11
+taxon_12 , 12
+taxon_13 , 13
+taxon_14 , 14
+taxon_15 , 15
+taxon_16 , 16
+bipartition 1 : 0011111111111111, appear times: 100
+bipartition 2 : 0000000000000011, appear times: 67
+bipartition 3 : 0000000000001100, appear times: 100
+bipartition 4 : 0000111100000000, appear times: 36
+bipartition 5 : 0011000000000000, appear times: 100
+bipartition 6 : 0000000000001111, appear times: 61
+bipartition 7 : 0000100011111111, appear times: 64
+bipartition 8 : 0000000000110000, appear times: 100
+bipartition 9 : 0000000011000000, appear times: 100
+bipartition 10 : 0000100000000010, appear times: 33
+bipartition 11 : 0000110000000000, appear times: 26
+bipartition 12 : 0000000011110000, appear times: 100
+bipartition 13 : 0000100000000011, appear times: 37
+bipartition 14 : 0000001100000000, appear times: 100
+bipartition 15 : 0000011100000000, appear times: 74
+bipartition 16 : 0000000011111100, appear times: 2
+bipartition 17 : 0000100000001111, appear times: 37
+bipartition 18 : 0000000011111111, appear times: 63
+bipartition 19 : 0000111111111111, appear times: 100
+successfully computed bipartitation matrix.
+Output bipartition matrix in list format to all_trees_unweighted_bipartition.out
+successfully computed Unweighted RF-distance distance.
+Successfully printed Unweighted RF-distance matrix!
+Applying exponential to distance matrix to obtain affinity matrix
+Succeed in computing affinity matrix
+Successfully printed Affinity-URF matrix!
+Using lambda+ 0.6, lambda- 1
+network has 100 nodes, 10000 links, 
+Value of modularity:0.299249
+Number of communities: 6
+Community 1 includes nodes: 1,4,6,7,12,24,25,28,34,35,36,37,40,41,63,65,66,68,70,80,81,86,88,97,99,
+Community 2 includes nodes: 2,5,8,14,17,21,26,27,29,38,43,44,45,46,47,48,50,52,54,59,61,64,72,73,74,78,79,83,84,90,91,94,98,
+Community 3 includes nodes: 3,9,11,15,16,19,23,30,31,32,39,42,49,51,53,56,57,58,62,69,71,75,77,87,92,96,
+Community 4 includes nodes: 10,13,18,60,82,85,89,93,95,100,
+Community 5 includes nodes: 22,33,
+Community 6 includes nodes: 20,55,67,76,
+Output community results to file: all_trees_Affinity-URF_community_results.out
+Successfully detected communities of Affinity-URF by model: CPM with high freq. bound:1, low freq. bound:0!
+Lambda positive: {1: 0.6, }
+Lambda negative: {1: 1, }

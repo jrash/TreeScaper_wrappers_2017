@@ -1,0 +1,20 @@
+#NEXUS
+
+begin trees;
+translate
+  1  taxon_1,
+  2  taxon_2,
+  3  taxon_3,
+  4  taxon_4,
+  5  taxon_5,
+  6  taxon_6,
+  7  taxon_7,
+  8  taxon_8,
+  9  taxon_9,
+  10  taxon_10,
+  11  taxon_11,
+  12  taxon_12,
+  13  taxon_13,
+  14  taxon_14,
+  15  taxon_15,
+  16  taxon_16;
