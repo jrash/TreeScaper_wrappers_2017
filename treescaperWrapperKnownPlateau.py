@@ -41,14 +41,15 @@ from shutil import move, copyfile
 from tempfile import mkstemp
 
 
-def make_list(ls,convert):
-	ls = ls.split("\t")
-	ls.remove("\n")
+def make_list(pre_ls,convert):
+	pre_ls = pre_ls.split("\t")
+	ls = [i for i in pre_ls if i != "\n"]
 	if convert == "int":
 		ls = [int(i) for i in ls]
 	if convert == "float":
 		ls = [float(i) for i in ls]
 # 	ls = ls[1:]
+	# print("list - "+str(ls))
 	return ls
 
 
@@ -85,19 +86,27 @@ def mode_function(lst):
 		return modeLS
 	
 	
-def get_plateau(treeSet, treeSetTrunc, type, model, rooted):
+def get_plateau(treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
 	if type == "Covariance":
 		comResults = open("%s_CovWholeCommunity_results.out" % treeSetTrunc)
+		#plateauLambda = 0.06
 	if type == "Affinity":
 		comResults = open("%s_AffWholeCommunity_results.out" % treeSetTrunc)
+		#plateauLambda = 0.6
+	labelLS_header = comResults.readline()
 	labelLS = comResults.readline()
 	labelLS = make_list(labelLS, "int")
+	# labelLS is a list of two numbers, 1st number of bipartitions, 2nd unsure
+	# This does not appear to be used again in the script
+	print "label"
 	print labelLS
 
+	lambdaLS_header = comResults.readline()
 	lambdaLS = comResults.readline()
 	lambdaLS = make_list(lambdaLS,"float")
+	print "lambda"
 	print lambdaLS
 
 # 	comNumLS = comResults.readline()
@@ -129,11 +138,12 @@ def get_plateau(treeSet, treeSetTrunc, type, model, rooted):
 #
 # 		plateauIndex = labelLS.index(plateauLabel[0])
 
-	plateauLambda = lambdaLS[0]
-	print plateauLambda
+	#plateauLambda = lambdaLS[0]
+	plateauLambda = plateau
+	print("plateau lambda: "+str(plateauLambda))
 
 	if type == "Covariance":
-		os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
+		os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
 		"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
 
@@ -191,7 +201,7 @@ def get_plateau(treeSet, treeSetTrunc, type, model, rooted):
 
 
 	if type == "Affinity":
-		os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
+		os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
 		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
@@ -234,28 +244,34 @@ def main():
 	
 	if network == 'Covariance':
 
-	 	os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
+	 	os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
 	 	"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
-	 	os.system("mv %s_Covariance\ Matrix_community_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
+	 	os.system("mv %s_unrooted_unweighted_Covariance_Matrix_community_auto_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
 
-	 	plateauLambda = get_plateau(treeSet, treeSetTrunc, "Covariance", model, rooted)
+	 	plateauLambda = get_plateau(treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+	 	print("platLambd"+str(plateauLambda))
 
 	if network == 'Affinity':
 
-		os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
+		# Re-run Treescaper with manual plateau
+
+		os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
 		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (treeSet, rooted, model, plateau)+\
-		" > %s_AffCommunity.out" %  treeSet)#outputs community structure for current lambda values
-		os.system("mv %s_Affinity-URF_community_results.out %s_AffWholeCommunity_results.out" % (treeSetTrunc, treeSetTrunc))
+		" > %s_AffCommunity.out" %  treeSet)
 
-		plateauLambda = get_plateau(treeSet, treeSetTrunc, "Affinity", model, rooted)
+		print("affinity plateau "+str(plateau))
 
+		os.system("mv %s_unrooted_unweighted_Affinity-URF_community_auto_results.out %s_AffWholeCommunity_results.out" % (treeSetTrunc, treeSetTrunc))
+
+		plateauLambda = get_plateau(treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		print("platLambd "+str(plateauLambda))
 		if plateauLambda:
-			affinityCommunityConsensus(treeSet, model ,plateauLambda, rooted)
+			affinityCommunityConsensus(treeSet, model, plateauLambda, rooted)
 
  	os.system("sumtrees.py -r -o all_trees.con all_trees.nex")
- 	os.system("cat ~/Documents/BrownLabJash/Programs/bin/SeqSim/FigTreeBlock.txt >> all_trees.con")
- 	os.system("figtree -graphic PDF all_trees.con all_trees.pdf")
+ 	os.system("cat /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/SeqSim/FigTreeBlock.txt >> all_trees.con")
+ 	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))
 

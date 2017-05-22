@@ -1,0 +1,48 @@
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/AffinityCommunities.py and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/AffinityCommunities.py differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/AffinityCommunities.pyc and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/AffinityCommunities.pyc differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/CLVTreeScaper and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/CLVTreeScaper differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees.con and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees.con differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees.nex and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees.nex differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees.nex_AffCommunity.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees.nex_AffCommunity.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees.nex_CovCommunity.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees.nex_CovCommunity.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_AffAuto.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_AffAuto.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_AffPlateauCommunity.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_AffPlateauCommunity.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_AffWholeCommunity_results.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_AffWholeCommunity_results.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_CovAuto.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_CovAuto.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_CovPlateauCommunity.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_CovPlateauCommunity.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_CovWholeCommunity_results.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_CovWholeCommunity_results.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/all_trees_comKey.out and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/all_trees_comKey.out differ
+Files /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017/treescaperWrapperKnownPlateau.py and /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/treescaperWrapperKnownPlateau.py differ
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom1.nex
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom1.nex.con
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom2.nex
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom2.nex.con
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom3.nex
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom3.nex.con
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom4.nex
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom4.nex.con
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom5.nex
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom5.nex.con
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom6.nex
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCom6.nex.con
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: AffinityCommunitiesTreeCount.txt
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Affinity-URF.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Affinity-URF_communities_plateaus.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Affinity-URF_community_results.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Covariance Matrix.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Covariance Matrix_communities_plateaus.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Covariance Matrix_community_results.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_Unweighted RF-distance.out
+Only in /Users/ChatNoir/Google Drive/TreeScaper/treescaper_scripts_2017: all_trees_unweighted_bipartition.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: .DS_Store
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_Affinity-URF.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_Affinity-URF_communities_auto_plateaus.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_Affinity-URF_community_manual_results.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_Covariance_Matrix.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_Covariance_Matrix_communities_auto_plateaus.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_Covariance_Matrix_community_manual_results.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_RF-distance.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_listFormat_bipartition.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: all_trees_unrooted_unweighted_matrixFormat_bipartition.out
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: commands.txt
+Only in /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test: diff.txt

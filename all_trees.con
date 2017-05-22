@@ -24,21 +24,18 @@ Summarized onto consensus tree with minimum clade frequency threshold of 0.5:
 
 Program Information
 -------------------
-SumTrees 4.2.0 by Jeet Sukumaran and Mark T. Holder
-DendroPy version      : DendroPy 4.2.0
-DendroPy location     : /usr/local/lib/python2.7/dist-packages/DendroPy-4.2.0-py2.7.egg/dendropy
-Python version        : 2.7.6 (default, Oct 26 2016, 20:30:19) [GCC 4.8.4]
-Python executable     : /usr/bin/python
-Python site packages  : ['/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages']
+SumTrees 4.0.0 (Jan 31 2015) by Jeet Sukumaran and Mark T. Holder
+Using None, located at: '/Users/ChatNoir/anaconda/DendroPy/dendropy'
+Running under Python 2.7.13 |Anaconda 2.1.0 (x86_64)| (default, Dec 20 2016, 23:05:08) (GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57)), located at: '/Users/ChatNoir/anaconda/bin/python'
 
 Execution Information
 ---------------------
-Executed on vestige-lab by vestige@vestige-lab
-Working directory: '/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017'
-Started at: 2017-05-07 17:16:46.880486
-Ended at: 2017-05-07 17:16:47.040069
-Total elapsed time: 0.159583 seconds
-Actual analysis time: 0.144791 seconds
+Executed on GGMount.wlan.lsu.edu by ChatNoir@GGMount.wlan.lsu.edu
+Working directory: '/Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test'
+Started at: 2017-05-22 14:21:14.108711
+Ended at: 2017-05-22 14:21:14.464425
+Total elapsed time: 0.355714 seconds
+Actual analysis time: 0.258847 seconds
 
 Citation Information
 --------------------
@@ -47,7 +44,7 @@ Citation Information
     phylogenetic computing. Bioinformatics 26: 1569-1571.
 
   Sukumaran, J and MT Holder. SumTrees: Phylogenetic Tree
-    Summarization. 4.2.0. Available at
+    Summarization. 4.0.0 (Jan 31 2015). Available at
     https://github.com/jeetsukumaran/DendroPy.
 
 ]

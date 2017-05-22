@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-# Make a nexus file of the trees in each affinity community. Make consensus tree of each affinity comunity
+##Make a nexus file of the trees in each affinity community. Make consensus tree of each affinity comunity
 
-# Usage AffinityCommunities.py 'Path/To/Treeset' Model Plateau
 
-# ****The TreeScaper developers have changed what number the indices start from several times.  The may start counting at 0 or 1.  Make sure all the indices used
-# in this script are right (for communities and trees).  Adjust the lines searching [&U] for unrooted trees or [&R] for rooted trees according to which type of trees you are using
+##Usage AffinityCommunities.py 'Path/To/Treeset' Model Plateau
+
+##****The TreeScaper developers have changed what number the indices start from several times.  The may start counting at 0 or 1.  Make sure all the indices used
+##in this script are right (for communities and trees).  Adjust the lines searching [&U] for unrooted trees or [&R] for rooted trees according to which type of trees you are using
 
 #Output files
 
@@ -67,14 +68,16 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 		model = raw_input('Enter Model: ')
 	print plateau
 	#outputs community structure for current plateau value
-	os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
+	os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
 	"-f %s -ft Trees -w 0 -r %s -o Community -t Affinity -dm URF -am Exp -cm %s -lm manu -lp %s -ln 0" % (treeFile, rooted, model, plateau)+\
-	" > Affinity%s_%s_community.out" %  (model, plateau))
+	" > Affinity%s_%s_community.what" %  (model, plateau))
+
+	print("AffinityCom.py")
+	print(str(treeFile)+str(model)+str(plateau)+str(rooted))
 	#getting number of communities from the output files
-	comFile = open('Affinity%s_%s_community.out' % (model, plateau) , 'r' )
+	comFile = open('Affinity%s_%s_community.what' % (model, plateau) , 'r' )
 	pattern = re.compile('Number of communities: (\d+)')
 	coms = int(reg_ex_match(comFile, pattern))
-	print
 	print coms
 
 	totalTrees = edit_treeset(treeFile)
@@ -112,8 +115,9 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 		if rooted == '0':
 			os.system("sumtrees.py -r --unrooted -o %s %s" % (comTreeConStr,comTreeSetStr))
 		if rooted == '1':
+			print "hey"
 			os.system("sumtrees.py -r --rooted -o %s %s" % (comTreeConStr,comTreeSetStr))
-		os.system("cat ~/Documents/BrownLabJash/Programs/bin/SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
+		os.system("cat /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
 		#Make a pdf of the consensus tree
 		os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
 
