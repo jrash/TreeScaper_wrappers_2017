@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message='updates'
+message='Editing/commenting Affinity.py'
 
 git add *
 git commit -m $message

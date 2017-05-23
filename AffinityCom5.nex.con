@@ -31,11 +31,11 @@ Running under Python 2.7.13 |Anaconda 2.1.0 (x86_64)| (default, Dec 20 2016, 23:
 Execution Information
 ---------------------
 Executed on GGMount.wlan.lsu.edu by ChatNoir@GGMount.wlan.lsu.edu
-Working directory: '/Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test'
-Started at: 2017-05-22 14:21:12.924375
-Ended at: 2017-05-22 14:21:13.014161
-Total elapsed time: 0.089786 seconds
-Actual analysis time: 0.005833 seconds
+Working directory: '/Users/ChatNoir/Projects/TreeScaper/TreeScaper_wrappers_2017'
+Started at: 2017-05-23 10:18:49.615672
+Ended at: 2017-05-23 10:18:49.706285
+Total elapsed time: 0.090613 seconds
+Actual analysis time: 0.005704 seconds
 
 Citation Information
 --------------------
