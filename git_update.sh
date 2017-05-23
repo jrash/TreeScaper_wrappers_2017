@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Editing and commenting Affinity.py"
+message="Works locally. Commit before cluster test"
 
 echo $message
 
