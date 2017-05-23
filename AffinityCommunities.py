@@ -104,15 +104,24 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 			if line.find('[&U]') == -1 & line.find('[&R]') == -1:
 				comTreeSet.write(line)
 			else:
-				for j in comLs:
-					# Adjust for Treescaper counting from 1 and Nexus file counting from 0. 
-					k = int(j) + 1
-					print("j: "+str(j))
-					print("k: "+str(k))
-					if line.find('['+str(k)+']') != -1:
-						print("line: "+str(line))
-						comTreeSet.write(line)
-						treeCount += 1
+				if line.find('[0]') != -1:
+					# Assuming that Treescaper counts from 0 and Nexus file counts from 0.
+					for j in comLs:
+						#print("j: "+str(j))
+						if line.find('['+str(j)+']') != -1:
+							print("line: "+str(line))
+							comTreeSet.write(line)
+							treeCount += 1
+				else:
+					# Adjust for Nexus file counting from 1. 
+					for j in comLs:
+						k = int(j) + 1
+						#print("j: "+str(j))
+						#print("k: "+str(k))
+						if line.find('['+str(k)+']') != -1:
+							#print("line: "+str(line))
+							comTreeSet.write(line)
+							treeCount += 1
 		#Write frequency and relative frequency of trees in the community
 		treeCountFile.write("%s\t%s\t%.2f%% of trees\n" % (comTreeSetStr, str(treeCount),100*(treeCount/totalTrees)))
 		comTreeSet.close()
