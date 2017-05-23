@@ -100,13 +100,17 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 		treeCount = 0
 		treeFile.seek(0)
 		for line in treeFile:
-			# print translate block to file
+			# print translate block to new community#.nex file
 			if line.find('[&U]') == -1 & line.find('[&R]') == -1:
 				comTreeSet.write(line)
-				print(line)
 			else:
 				for j in comLs:
-					if line.find('['+str(j)+']') != -1:
+					# Adjust for Treescaper counting from 1 and Nexus file counting from 0. 
+					k = int(j) + 1
+					print("j: "+str(j))
+					print("k: "+str(k))
+					if line.find('['+str(k)+']') != -1:
+						print("line: "+str(line))
 						comTreeSet.write(line)
 						treeCount += 1
 		#Write frequency and relative frequency of trees in the community
