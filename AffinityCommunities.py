@@ -66,19 +66,19 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 	if model not in ('CPM','ERNM','CNM','NNM'):
 		print "invalid model choose CPM, ERNM, CNM, or NNM"
 		model = raw_input('Enter Model: ')
-	print plateau
+	print("Plateau lambda: "+str(plateau))
 	#outputs community structure for current plateau value
 	os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
 	"-f %s -ft Trees -w 0 -r %s -o Community -t Affinity -dm URF -am Exp -cm %s -lm manu -lp %s -ln 0" % (treeFile, rooted, model, plateau)+\
 	" > Affinity%s_%s_community.what" %  (model, plateau))
 
-	print("AffinityCom.py")
-	print(str(treeFile)+str(model)+str(plateau)+str(rooted))
-	#getting number of communities from the output files
+	#print("AffinityCom.py")
+	#print(str(treeFile)+str(model)+str(plateau)+str(rooted))
+	#getting number of communities from the output files, coms
 	comFile = open('Affinity%s_%s_community.what' % (model, plateau) , 'r' )
 	pattern = re.compile('Number of communities: (\d+)')
 	coms = int(reg_ex_match(comFile, pattern))
-	print coms
+	print("Number of communities: "+str(coms))
 
 	totalTrees = edit_treeset(treeFile)
 	treeFile = open(treeFile,'r')
@@ -92,7 +92,7 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 		pattern = re.compile('Community '+str(i)+' includes nodes: (.+)')
 		comStr = reg_ex_match(comFile, pattern)
 		comLs = comStr.split(",")
-		print comLs
+		print("Trees in community "+str(i)+" : "+str(comLs))
 		comLs = filter(None, comLs)
 		#Pull out these trees from the original trees. Make a nexus file containing the trees for each community
 		comTreeSetStr = 'AffinityCom'+str(i)+'.nex'
@@ -100,13 +100,28 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 		treeCount = 0
 		treeFile.seek(0)
 		for line in treeFile:
+			# print translate block to new community#.nex file
 			if line.find('[&U]') == -1 & line.find('[&R]') == -1:
 				comTreeSet.write(line)
 			else:
-				for j in comLs:
-					if line.find('['+str(j)+']') != -1:
-						comTreeSet.write(line)
-						treeCount += 1
+				if line.find('[0]') != -1:
+					# Assuming that Treescaper counts from 0 and Nexus file counts from 0.
+					for j in comLs:
+						#print("j: "+str(j))
+						if line.find('['+str(j)+']') != -1:
+							print("line: "+str(line))
+							comTreeSet.write(line)
+							treeCount += 1
+				else:
+					# Adjust for Nexus file counting from 1. 
+					for j in comLs:
+						k = int(j) + 1
+						#print("j: "+str(j))
+						#print("k: "+str(k))
+						if line.find('['+str(k)+']') != -1:
+							#print("line: "+str(line))
+							comTreeSet.write(line)
+							treeCount += 1
 		#Write frequency and relative frequency of trees in the community
 		treeCountFile.write("%s\t%s\t%.2f%% of trees\n" % (comTreeSetStr, str(treeCount),100*(treeCount/totalTrees)))
 		comTreeSet.close()

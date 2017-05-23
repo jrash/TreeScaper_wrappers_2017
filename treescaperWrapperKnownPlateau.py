@@ -3,12 +3,11 @@
 #Usage: treescaperWrapperKnownPlateau.py [model] [plateau] [network] [rooted]
 #[model] can be CNM/CPM/ERNM/NNM
 
-#***Check the ./CLVTreescaper settings within the script.  You might want to run ./CLVTreescaper with different options.  Make sure the
-#numbering of all the indices is correct. The developers have changed between starting at 1 and starting at 0.  This includes
-#the affinityCommunities script that is imported into this script.
+#***Check the ./CLVTreescaper settings within the script.  You might want to run ./CLVTreescaper with different options.  
+# Make sure the numbering of all the indices is correct. The developers have changed between starting at 1 and starting at 0.  
+# This includes the affinityCommunities script that is imported into this script.
 
-#useful if you have found the plateau with the automatic search function of the treescaper GUI.  If you enter the lambda values where the plateau was found for
-#both affinity and covariance matrices, you will get all the useful output of treescaperWrapperV2.py.  See treescaperWrapperV2.py for usage and output.
+#useful if you have found the plateau with the automatic search function of the treescaper GUI.  If you enter the lambda values where the plateau was found for both affinity and covariance matrices, you will get all the useful output of treescaperWrapperV2.py.  See treescaperWrapperV2.py for usage and output.
 
 #output files
 
@@ -22,9 +21,6 @@
 # AffinityCom[number].nex: a nexus file of the trees in an affinity community
 # AffinityCom[number].nex.con: consensus tree of an affinity community
 # AffinityCom[number].nex.con.pdf: pdf of consensus tree of an affinity community
-
-
-###Numbering looks right now####
 
 import re
 import os
