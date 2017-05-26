@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="deleting extra files"
+message="add job script"
 
 echo $message
 
