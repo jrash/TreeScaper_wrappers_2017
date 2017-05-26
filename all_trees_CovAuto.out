@@ -1,0 +1,57 @@
+loading all parameters
+unweighted unrooted trees
+Successfully read 100 trees from file: all_trees.nex.
+Unique bipartition number: 19
+Translation of taxa:
+taxon_1 , 1
+taxon_2 , 2
+taxon_3 , 3
+taxon_4 , 4
+taxon_5 , 5
+taxon_6 , 6
+taxon_7 , 7
+taxon_8 , 8
+taxon_9 , 9
+taxon_10 , 10
+taxon_11 , 11
+taxon_12 , 12
+taxon_13 , 13
+taxon_14 , 14
+taxon_15 , 15
+taxon_16 , 16
+bipartition 1 : 0000000000000011, appear times: 67
+bipartition 2 : 0000000011000000, appear times: 100
+bipartition 3 : 0011111111111111, appear times: 100
+bipartition 4 : 0000111111111111, appear times: 100
+bipartition 5 : 0000100000001111, appear times: 37
+bipartition 6 : 0000000011111100, appear times: 2
+bipartition 7 : 0000000011111111, appear times: 63
+bipartition 8 : 0000001100000000, appear times: 100
+bipartition 9 : 0000011100000000, appear times: 74
+bipartition 10 : 0000000000110000, appear times: 100
+bipartition 11 : 0000100000000011, appear times: 37
+bipartition 12 : 0000000011110000, appear times: 100
+bipartition 13 : 0000100000000010, appear times: 33
+bipartition 14 : 0000110000000000, appear times: 26
+bipartition 15 : 0000100011111111, appear times: 64
+bipartition 16 : 0000000000001100, appear times: 100
+bipartition 17 : 0000000000001111, appear times: 61
+bipartition 18 : 0000111100000000, appear times: 36
+bipartition 19 : 0011000000000000, appear times: 100
+Successfully computed bipartitation matrix.
+Output bipartition matrix in list format to all_trees_unrooted_unweighted_listFormat_bipartition.out
+Successfully computed covariance matrix of bipartition.
+Successfully printed Covariance Matrix matrix!
+lambda neg: 0
+lambda pos min: -1, lambda pos max: 1
+The testing values of lambda pos are:
+-1, 1, 0, -0.5, 0.5, -0.25, 0.25, -0.125, 0.125, -0.1875, 0.0625, 0.1875, 
+The found plateaus are:
+[-0.125, 0.0625], length:0.1875, number of communities:2
+Detailed check lambda pos are (if necessary):
+The found plateaus are:
+[-0.1875:-0.125, 0.0625:0.125], length lower bound:0.1875, length upper bound:0.3125, number of communities:2
+Output community results to file: all_trees_unrooted_unweighted_Covariance_Matrix_community_auto_results.out and all_trees_unrooted_unweighted_Covariance_Matrix_communities_auto_plateaus.out
+
+Successfully detected communities of Covariance Matrix by model: CPM with high freq. bound:.95, low freq. bound:.05!
+Lambdas are chosen automatically.

@@ -25,6 +25,7 @@
 import re
 import os
 import sys
+import glob
 import numpy as np
 import fnmatch
 from collections import Counter
@@ -241,7 +242,10 @@ def main():
 
 	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
-	 	os.system("mv %s_unrooted_unweighted_Covariance_Matrix_community_auto_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
+	 	# get output file from previous run
+	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
+	 	# change name 
+	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
@@ -255,7 +259,10 @@ def main():
 
 		print("affinity plateau "+str(plateau))
 
-		os.system("mv %s_unrooted_unweighted_Affinity-URF_community_auto_results.out %s_AffWholeCommunity_results.out" % (treeSetTrunc, treeSetTrunc))
+		# change file name. 
+		aCar=glob.glob('%s*_Affinity-*community_auto_results.out' % (treeSetTrunc))
+
+		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 
 		plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		print("platLambd "+str(plateauLambda))

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="add job script"
+message="edits"
 
 echo $message
 
