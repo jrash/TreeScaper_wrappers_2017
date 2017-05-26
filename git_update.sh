@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="removing output files"
+message="Fixing CLV path issues"
 
 echo $message
 

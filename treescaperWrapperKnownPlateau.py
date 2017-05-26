@@ -139,8 +139,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 	print("plateau lambda: "+str(plateauLambda))
 
 	if type == "Covariance":
-		os.system( "%s -trees "+\
-		"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
+		os.system( "%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
 
 
@@ -197,8 +196,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
 	if type == "Affinity":
-		os.system("%s -trees "+\
-		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
+		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
 
@@ -241,30 +239,28 @@ def main():
 	
 	if network == 'Covariance':
 
-	 	os.system("%s -trees "+\
-	 	"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
+	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
 	 	os.system("mv %s_unrooted_unweighted_Covariance_Matrix_community_auto_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
 
-	 	plateauLambda = get_plateau(treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
 
 	if network == 'Affinity':
 
 		# Re-run Treescaper with manual plateau
 
-		os.system("%s -trees "+\
-		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
+		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
 		" > %s_AffCommunity.out" %  treeSet)
 
 		print("affinity plateau "+str(plateau))
 
 		os.system("mv %s_unrooted_unweighted_Affinity-URF_community_auto_results.out %s_AffWholeCommunity_results.out" % (treeSetTrunc, treeSetTrunc))
 
-		plateauLambda = get_plateau(treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		print("platLambd "+str(plateauLambda))
 		if plateauLambda:
-			affinityCommunityConsensus(treeSet, model, plateauLambda, rooted)
+			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
 
  	os.system("sumtrees.py -r -o all_trees.con all_trees.nex")
  	os.system("cat ./SeqSim/FigTreeBlock.txt >> all_trees.con")

@@ -68,8 +68,7 @@ def affinityCommunityConsensus(clvPath, treeFile,model,plateau,rooted):
 		model = raw_input('Enter Model: ')
 	print("Plateau lambda: "+str(plateau))
 	#outputs community structure for current plateau value
-	os.system("%s -trees "+\
-	"-f %s -ft Trees -w 0 -r %s -o Community -t Affinity -dm URF -am Exp -cm %s -lm manu -lp %s -ln 0" % (clvPath, treeFile, rooted, model, plateau)+\
+	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Affinity -dm URF -am Exp -cm %s -lm manu -lp %s -ln 0" % (clvPath, treeFile, rooted, model, plateau)+\
 	" > Affinity%s_%s_community.what" %  (model, plateau))
 
 	#print("AffinityCom.py")
