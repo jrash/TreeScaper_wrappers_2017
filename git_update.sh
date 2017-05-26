@@ -1,9 +1,9 @@
 #!/bin/bash
 
-message="Works locally. Commit before cluster test"
+message="removing output files"
 
 echo $message
 
 git add *
-git commit -m "$message"
+git commit -a -m "$message"
 git push

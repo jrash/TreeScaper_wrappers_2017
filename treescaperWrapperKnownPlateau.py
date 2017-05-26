@@ -82,7 +82,7 @@ def mode_function(lst):
 		return modeLS
 	
 	
-def get_plateau(treeSet, treeSetTrunc, type, model, rooted, plateau):
+def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
 	if type == "Covariance":
@@ -139,8 +139,8 @@ def get_plateau(treeSet, treeSetTrunc, type, model, rooted, plateau):
 	print("plateau lambda: "+str(plateauLambda))
 
 	if type == "Covariance":
-		os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
-		"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (treeSet, rooted, model, plateauLambda)+\
+		os.system( "%s -trees "+\
+		"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
 
 
@@ -197,8 +197,8 @@ def get_plateau(treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
 	if type == "Affinity":
-		os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
-		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (treeSet, rooted, model, plateauLambda)+\
+		os.system("%s -trees "+\
+		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
 
@@ -208,10 +208,11 @@ def get_plateau(treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
 def main():
-	model = sys.argv[1]
-	plateau = sys.argv[2]
-	network = sys.argv[3]
-	rooted = sys.argv[4]
+	clvPath = sys.argv[1]
+	model = sys.argv[2]
+	plateau = sys.argv[3]
+	network = sys.argv[4]
+	rooted = sys.argv[5]
 	for file in os.listdir('.'):
 		for file in os.listdir('.'):
 			if fnmatch.fnmatch(file, 'all_trees.nex'):
@@ -240,8 +241,8 @@ def main():
 	
 	if network == 'Covariance':
 
-	 	os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
-	 	"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (treeSet, rooted, model, plateau)+\
+	 	os.system("%s -trees "+\
+	 	"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
 	 	os.system("mv %s_unrooted_unweighted_Covariance_Matrix_community_auto_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
 
@@ -252,8 +253,8 @@ def main():
 
 		# Re-run Treescaper with manual plateau
 
-		os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
-		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (treeSet, rooted, model, plateau)+\
+		os.system("%s -trees "+\
+		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
 		" > %s_AffCommunity.out" %  treeSet)
 
 		print("affinity plateau "+str(plateau))
@@ -266,7 +267,7 @@ def main():
 			affinityCommunityConsensus(treeSet, model, plateauLambda, rooted)
 
  	os.system("sumtrees.py -r -o all_trees.con all_trees.nex")
- 	os.system("cat /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/SeqSim/FigTreeBlock.txt >> all_trees.con")
+ 	os.system("cat ./SeqSim/FigTreeBlock.txt >> all_trees.con")
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))

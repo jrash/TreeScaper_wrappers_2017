@@ -61,15 +61,15 @@ def edit_treeset(treeFileEditPath):
 	move(absPath, treeFileEditPath)
 	return lineNum
 
-def affinityCommunityConsensus(treeFile,model,plateau,rooted):
+def affinityCommunityConsensus(clvPath, treeFile,model,plateau,rooted):
 
 	if model not in ('CPM','ERNM','CNM','NNM'):
 		print "invalid model choose CPM, ERNM, CNM, or NNM"
 		model = raw_input('Enter Model: ')
 	print("Plateau lambda: "+str(plateau))
 	#outputs community structure for current plateau value
-	os.system("/Applications/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/MAC_TreeScaper_v1.0.0_Binary_2016-12-16/CLVTreeScaper -trees "+\
-	"-f %s -ft Trees -w 0 -r %s -o Community -t Affinity -dm URF -am Exp -cm %s -lm manu -lp %s -ln 0" % (treeFile, rooted, model, plateau)+\
+	os.system("%s -trees "+\
+	"-f %s -ft Trees -w 0 -r %s -o Community -t Affinity -dm URF -am Exp -cm %s -lm manu -lp %s -ln 0" % (clvPath, treeFile, rooted, model, plateau)+\
 	" > Affinity%s_%s_community.what" %  (model, plateau))
 
 	#print("AffinityCom.py")
@@ -132,9 +132,9 @@ def affinityCommunityConsensus(treeFile,model,plateau,rooted):
 		if rooted == '1':
 			print "hey"
 			os.system("sumtrees.py -r --rooted -o %s %s" % (comTreeConStr,comTreeSetStr))
-		os.system("cat /Users/ChatNoir/Projects/TreeScaper/treescaper_scripts_2017_test/SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
+		os.system("cat ./SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
 		#Make a pdf of the consensus tree
-		os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
+		#os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
 
 
 
