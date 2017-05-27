@@ -40,17 +40,21 @@ bipartition 18 : 0000111100000000, appear times: 36
 bipartition 19 : 0011000000000000, appear times: 100
 Successfully computed bipartitation matrix.
 Output bipartition matrix in list format to all_trees_rooted_unweighted_listFormat_bipartition.out
-Successfully computed covariance matrix of bipartition.
-Successfully printed Covariance Matrix matrix!
-Using lambda+ 0.06, lambda- 1
-Network has 10 nodes, 100 links, 
-Value of modularity:5.72671
-Number of communities: 1
-Community 1 includes nodes: 0,4,6,8,10,12,13,14,16,17,
-Free node index:
-1, 2, 3, 5, 7, 9, 11, 15, 18, 
-Output community results to file: all_trees_rooted_unweighted_Covariance_Matrix_community_manual_results.out
+Successfully computed Unweighted RF-distance distance.
+Successfully printed Unweighted RF-distance matrix!
+Applying exponential to distance matrix to obtain affinity matrix
+Succeed in computing affinity matrix
+Successfully printed Affinity-URF matrix!
+lambda neg: 0
+lambda pos min: -1, lambda pos max: 1
+The testing values of lambda pos are:
+-1, 1, 0, 0.5, 0.25, 0.75, 0.125, 0.375, 0.875, 
+The found plateaus are:
+[0.375, 0.875], length:0.5, number of communities:6
+Detailed check lambda pos are (if necessary):
+The found plateaus are:
+[0.25:0.375, 0.875:1], length lower bound:0.5, length upper bound:0.75, number of communities:6
+Output community results to file: all_trees_rooted_unweighted_Affinity-URF_community_auto_results.out and all_trees_rooted_unweighted_Affinity-URF_communities_auto_plateaus.out
 
-Successfully detected communities of Covariance Matrix by model: CPM with high freq. bound:.95, low freq. bound:.05!
-Lambda positive: {1: 0.06, }
-Lambda negative: {1: 1, }
+Successfully detected communities of Affinity-URF by model: CPM with high freq. bound:1, low freq. bound:0!
+Lambdas are chosen automatically.

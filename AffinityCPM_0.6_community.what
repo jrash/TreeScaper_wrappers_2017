@@ -40,17 +40,23 @@ bipartition 18 : 0000111100000000, appear times: 36
 bipartition 19 : 0011000000000000, appear times: 100
 Successfully computed bipartitation matrix.
 Output bipartition matrix in list format to all_trees_rooted_unweighted_listFormat_bipartition.out
-Successfully computed covariance matrix of bipartition.
-Successfully printed Covariance Matrix matrix!
-Using lambda+ 0.06, lambda- 1
-Network has 10 nodes, 100 links, 
-Value of modularity:5.72671
-Number of communities: 1
-Community 1 includes nodes: 0,4,6,8,10,12,13,14,16,17,
-Free node index:
-1, 2, 3, 5, 7, 9, 11, 15, 18, 
-Output community results to file: all_trees_rooted_unweighted_Covariance_Matrix_community_manual_results.out
+Successfully computed Unweighted RF-distance distance.
+Successfully printed Unweighted RF-distance matrix!
+Applying exponential to distance matrix to obtain affinity matrix
+Succeed in computing affinity matrix
+Successfully printed Affinity-URF matrix!
+Using lambda+ 0.6, lambda- 0
+Network has 100 nodes, 10000 links, 
+Value of modularity:0.299249
+Number of communities: 6
+Community 1 includes nodes: 0,3,5,6,11,23,24,27,33,34,35,36,39,40,62,64,65,67,69,79,80,85,87,96,98,
+Community 2 includes nodes: 1,4,7,13,16,20,25,26,28,37,42,43,44,45,46,47,49,51,53,58,60,63,71,72,73,77,78,82,83,89,90,93,97,
+Community 3 includes nodes: 2,8,10,14,15,18,22,29,30,31,38,41,48,50,52,55,56,57,61,68,70,74,76,86,91,95,
+Community 4 includes nodes: 9,12,17,59,81,84,88,92,94,99,
+Community 5 includes nodes: 21,32,
+Community 6 includes nodes: 19,54,66,75,
+Output community results to file: all_trees_rooted_unweighted_Affinity-URF_community_manual_results.out
 
-Successfully detected communities of Covariance Matrix by model: CPM with high freq. bound:.95, low freq. bound:.05!
-Lambda positive: {1: 0.06, }
-Lambda negative: {1: 1, }
+Successfully detected communities of Affinity-URF by model: CPM with high freq. bound:1, low freq. bound:0!
+Lambda positive: {1: 0.6, }
+Lambda negative: {1: 0, }

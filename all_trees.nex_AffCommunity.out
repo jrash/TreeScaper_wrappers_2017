@@ -40,18 +40,23 @@ bipartition 18 : 0000111100000000, appear times: 36
 bipartition 19 : 0011000000000000, appear times: 100
 Successfully computed bipartitation matrix.
 Output bipartition matrix in list format to all_trees_rooted_unweighted_listFormat_bipartition.out
-Successfully computed covariance matrix of bipartition.
-Successfully printed Covariance Matrix matrix!
-lambda neg: 0
-lambda pos min: -1, lambda pos max: 1
-The testing values of lambda pos are:
--1, 1, 0, -0.5, 0.5, -0.25, 0.25, -0.125, 0.125, -0.1875, 0.0625, 0.1875, 
-The found plateaus are:
-[-0.125, 0.0625], length:0.1875, number of communities:2
-Detailed check lambda pos are (if necessary):
-The found plateaus are:
-[-0.1875:-0.125, 0.0625:0.125], length lower bound:0.1875, length upper bound:0.3125, number of communities:2
-Output community results to file: all_trees_rooted_unweighted_Covariance_Matrix_community_auto_results.out and all_trees_rooted_unweighted_Covariance_Matrix_communities_auto_plateaus.out
+Successfully computed Unweighted RF-distance distance.
+Successfully printed Unweighted RF-distance matrix!
+Applying exponential to distance matrix to obtain affinity matrix
+Succeed in computing affinity matrix
+Successfully printed Affinity-URF matrix!
+Using lambda+ 0.6, lambda- 0
+Network has 100 nodes, 10000 links, 
+Value of modularity:0.299249
+Number of communities: 6
+Community 1 includes nodes: 0,3,5,6,11,23,24,27,33,34,35,36,39,40,62,64,65,67,69,79,80,85,87,96,98,
+Community 2 includes nodes: 1,4,7,13,16,20,25,26,28,37,42,43,44,45,46,47,49,51,53,58,60,63,71,72,73,77,78,82,83,89,90,93,97,
+Community 3 includes nodes: 2,8,10,14,15,18,22,29,30,31,38,41,48,50,52,55,56,57,61,68,70,74,76,86,91,95,
+Community 4 includes nodes: 9,12,17,59,81,84,88,92,94,99,
+Community 5 includes nodes: 21,32,
+Community 6 includes nodes: 19,54,66,75,
+Output community results to file: all_trees_rooted_unweighted_Affinity-URF_community_manual_results.out
 
-Successfully detected communities of Covariance Matrix by model: CPM with high freq. bound:.95, low freq. bound:.05!
-Lambdas are chosen automatically.
+Successfully detected communities of Affinity-URF by model: CPM with high freq. bound:1, low freq. bound:0!
+Lambda positive: {1: 0.6, }
+Lambda negative: {1: 0, }
