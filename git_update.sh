@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="fixing input file issues"
+message="delete output file"
 
 echo $message
 
