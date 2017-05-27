@@ -1,18 +1,2 @@
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.6 Affinity 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
-
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper CPM 0.06 Covariance 1
+treescaperWrapperKnownPlateau.py ./CLVTreeScaper all_trees.nex CPM 0.06 Covariance 1
 

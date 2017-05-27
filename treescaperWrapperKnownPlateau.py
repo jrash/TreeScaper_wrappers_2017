@@ -208,32 +208,30 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 def main():
 	clvPath = sys.argv[1]
-	model = sys.argv[2]
-	plateau = sys.argv[3]
-	network = sys.argv[4]
-	rooted = sys.argv[5]
+	inNexus = sys.argv[2]
+	model = sys.argv[3]
+	plateau = sys.argv[4]
+	network = sys.argv[5]
+	rooted = sys.argv[6]
+
+	'''
 	for file in os.listdir('.'):
-		for file in os.listdir('.'):
-			if fnmatch.fnmatch(file, 'all_trees.nex'):
-				if rooted == '1':
-					tlst = dendropy.TreeList.get_from_path("all_trees.nex", "nexus", rooting='force-rooted')
-				else:
-					tlst = dendropy.TreeList.get_from_path("all_trees.nex", "nexus", rooting='force-unrooted')
-			elif fnmatch.fnmatch(file, 'all_trees.new'):
-				if rooted == '1':
-					tlst = dendropy.TreeList.get_from_path("all_trees.new", "newick", rooting='force-rooted')
-				else:
-					tlst = dendropy.TreeList.get_from_path("all_trees.new", "newick", rooting='force-unrooted')
+		if fnmatch.fnmatch(file, inNexus):
+			if rooted == '1':
+				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-rooted')
+			else:
+				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-unrooted')
 
 	tlst.write_to_path("all_trees.pre.nex",'nexus', simple=True, translate_tree_taxa=True)
-
+	
 	with open("all_trees.nex", "w") as fout:
 		with open("all_trees.pre.nex", "r") as fin:
 			for line in fin:
 				fout.write(re.sub('END;\n', 'END;',line))
 
 	os.system("rm all_trees.pre.nex")
-	treeSet="all_trees.nex"
+	'''
+	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
 	os.system("echo 'hi'")
@@ -244,7 +242,7 @@ def main():
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
 	 	# get output file from previous run
 	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
-	 	# change name 
+	 	# change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
@@ -268,9 +266,9 @@ def main():
 		print("platLambd "+str(plateauLambda))
 		if plateauLambda:
 			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
-
- 	os.system("sumtrees.py -r -o all_trees.con all_trees.nex")
- 	os.system("cat ./SeqSim/FigTreeBlock.txt >> all_trees.con")
+	print(type(treeSetTrunc))
+ 	os.system("sumtrees.py -r -o %s.con %s" % (treeSetTrunc, inNexus))
+	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))

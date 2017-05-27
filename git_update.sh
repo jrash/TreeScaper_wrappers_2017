@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="edits"
+message="fixing input file issues"
 
 echo $message
 

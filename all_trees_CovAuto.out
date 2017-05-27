@@ -1,5 +1,5 @@
 loading all parameters
-unweighted unrooted trees
+unweighted rooted trees
 Successfully read 100 trees from file: all_trees.nex.
 Unique bipartition number: 19
 Translation of taxa:
@@ -39,7 +39,7 @@ bipartition 17 : 0000000000001111, appear times: 61
 bipartition 18 : 0000111100000000, appear times: 36
 bipartition 19 : 0011000000000000, appear times: 100
 Successfully computed bipartitation matrix.
-Output bipartition matrix in list format to all_trees_unrooted_unweighted_listFormat_bipartition.out
+Output bipartition matrix in list format to all_trees_rooted_unweighted_listFormat_bipartition.out
 Successfully computed covariance matrix of bipartition.
 Successfully printed Covariance Matrix matrix!
 lambda neg: 0
@@ -51,7 +51,7 @@ The found plateaus are:
 Detailed check lambda pos are (if necessary):
 The found plateaus are:
 [-0.1875:-0.125, 0.0625:0.125], length lower bound:0.1875, length upper bound:0.3125, number of communities:2
-Output community results to file: all_trees_unrooted_unweighted_Covariance_Matrix_community_auto_results.out and all_trees_unrooted_unweighted_Covariance_Matrix_communities_auto_plateaus.out
+Output community results to file: all_trees_rooted_unweighted_Covariance_Matrix_community_auto_results.out and all_trees_rooted_unweighted_Covariance_Matrix_communities_auto_plateaus.out
 
 Successfully detected communities of Covariance Matrix by model: CPM with high freq. bound:.95, low freq. bound:.05!
 Lambdas are chosen automatically.
