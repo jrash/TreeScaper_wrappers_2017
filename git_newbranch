@@ -1,6 +1,6 @@
 #!/bin/bash
 
-new_branch='ggm_May23'
+new_branch='ggm_May26'
 
 
 git branch $new_branch

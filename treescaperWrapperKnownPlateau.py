@@ -25,6 +25,7 @@
 import re
 import os
 import sys
+import glob
 import numpy as np
 import fnmatch
 from collections import Counter
@@ -139,8 +140,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 	print("plateau lambda: "+str(plateauLambda))
 
 	if type == "Covariance":
-		os.system( "%s -trees "+\
-		"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
+		os.system( "%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
 
 
@@ -197,8 +197,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
 	if type == "Affinity":
-		os.system("%s -trees "+\
-		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
+		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
 
@@ -209,65 +208,67 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 def main():
 	clvPath = sys.argv[1]
-	model = sys.argv[2]
-	plateau = sys.argv[3]
-	network = sys.argv[4]
-	rooted = sys.argv[5]
+	inNexus = sys.argv[2]
+	model = sys.argv[3]
+	plateau = sys.argv[4]
+	network = sys.argv[5]
+	rooted = sys.argv[6]
+
+	'''
 	for file in os.listdir('.'):
-		for file in os.listdir('.'):
-			if fnmatch.fnmatch(file, 'all_trees.nex'):
-				if rooted == '1':
-					tlst = dendropy.TreeList.get_from_path("all_trees.nex", "nexus", rooting='force-rooted')
-				else:
-					tlst = dendropy.TreeList.get_from_path("all_trees.nex", "nexus", rooting='force-unrooted')
-			elif fnmatch.fnmatch(file, 'all_trees.new'):
-				if rooted == '1':
-					tlst = dendropy.TreeList.get_from_path("all_trees.new", "newick", rooting='force-rooted')
-				else:
-					tlst = dendropy.TreeList.get_from_path("all_trees.new", "newick", rooting='force-unrooted')
+		if fnmatch.fnmatch(file, inNexus):
+			if rooted == '1':
+				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-rooted')
+			else:
+				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-unrooted')
 
 	tlst.write_to_path("all_trees.pre.nex",'nexus', simple=True, translate_tree_taxa=True)
-
+	
 	with open("all_trees.nex", "w") as fout:
 		with open("all_trees.pre.nex", "r") as fin:
 			for line in fin:
 				fout.write(re.sub('END;\n', 'END;',line))
 
 	os.system("rm all_trees.pre.nex")
-	treeSet="all_trees.nex"
+	'''
+	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
 	os.system("echo 'hi'")
 	
 	if network == 'Covariance':
 
-	 	os.system("%s -trees "+\
-	 	"-f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
+	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
-	 	os.system("mv %s_unrooted_unweighted_Covariance_Matrix_community_auto_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
+	 	# get output file from previous run
+	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
+	 	# change name, might want to turn this into cp instead of mv
+	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	plateauLambda = get_plateau(treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
 
 	if network == 'Affinity':
 
 		# Re-run Treescaper with manual plateau
 
-		os.system("%s -trees "+\
-		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
+		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
 		" > %s_AffCommunity.out" %  treeSet)
 
 		print("affinity plateau "+str(plateau))
 
-		os.system("mv %s_unrooted_unweighted_Affinity-URF_community_auto_results.out %s_AffWholeCommunity_results.out" % (treeSetTrunc, treeSetTrunc))
+		# change file name. 
+		aCar=glob.glob('%s*_Affinity-*community_auto_results.out' % (treeSetTrunc))
 
-		plateauLambda = get_plateau(treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
+
+		plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		print("platLambd "+str(plateauLambda))
 		if plateauLambda:
-			affinityCommunityConsensus(treeSet, model, plateauLambda, rooted)
-
- 	os.system("sumtrees.py -r -o all_trees.con all_trees.nex")
- 	os.system("cat ./SeqSim/FigTreeBlock.txt >> all_trees.con")
+			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
+	print(type(treeSetTrunc))
+ 	os.system("sumtrees.py -r -o %s.con %s" % (treeSetTrunc, inNexus))
+	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))

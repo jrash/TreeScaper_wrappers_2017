@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="removing output files"
+message="delete output file"
 
 echo $message
 
