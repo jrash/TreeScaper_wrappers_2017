@@ -1,4 +1,5 @@
 #!/bin/bash
+# Run this from one folder above your git folder
 
 cd ./TreeScaper_wrappers_2017
 
