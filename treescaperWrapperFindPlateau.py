@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#Usage: treescaperWrapperKnownPlateau.py [CLV path] [model] [plateau] [network] [rooted]
+#Usage: treescaperWrapperFindPlateau.py [CLV path] [model] [network] [rooted]
 #[model] can be CNM/CPM/ERNM/NNM
 
 #***Check the ./CLVTreescaper settings within the script.  You might want to run ./CLVTreescaper with different options.  
@@ -13,7 +13,6 @@
 
 # ['type'] can be Covariance or Affinity
 # ['treeset'] tree set name
-# ['plateauLambda'] the lambda value were the plateau was found
 
 #['treeset']_['type']WholeCommunity_results.out: community results over the whole range of lambda values
 #['treeset']_CovPlateauCommunity.out: community structure of the plateau
@@ -59,10 +58,31 @@ def reg_ex_match(file, pattern):
 		if m:
 			return m.group(1)
 
+def autoFindlambda(inOutFile):
+	largePlateau=[]
+	allPlateaus=[]
+	pattern = 'The found plateaus are:'
+	with open(inOutFile , 'r' ) as file:
+		for line in file:
+			if pattern in line:
+				# This pulls both the largest plateau, and a line containing all lambdas
+				# The second occurance isnt parse properly in this script. But keeping it for parsing later if needed.
+				a = (next(file,'').strip())
+				b = a.split(",")[0].strip("[")
+				c = a.split(",")[1].strip("]")
+				# Store both lines for later use
+				allPlateaus.append(a)
+				# Add first and second numbers
+				largePlateau.append(b)
+				largePlateau.append(c)
+	# Pull out largest plateau and get lambda in middle of it. 
+	plat = [float(largePlateau[0]), float(largePlateau[1])]
+	manLamdba = np.mean(plat)
+	return manLamdba
+
 
 def mode_function(lst):
-#Returns a list of all the possible plateaus
-
+	#Returns a list of all the possible plateaus
 
 	counterLst = Counter(lst)
 	_,val = counterLst.most_common(1)[0]
@@ -106,34 +126,34 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 	print "lambda"
 	print lambdaLS
 
-# 	comNumLS = comResults.readline()
-# 	conNumLS = make_list(comNumLS, "int")
-# 	print conNumLS
-# 	m = max(labelLS)
-#
-# 	labelLStrim= [i for i in labelLS if i != m and i != 0]
-# 	print labelLStrim
-#
-# 	if type == "Affinity" and labelLStrim != []:
-#
-# 		m = max(labelLStrim)
-# 		print m
-#
-# 		labelLStrim= [i for i in labelLStrim if i != m]
-# 		print labelLStrim
-#
-#
-# 	if labelLStrim != []:  #if using traditional search for plateau, call mode_function
-# 		plateauLabel = mode_function(labelLStrim)
-# 	else:  #if using automatic search and feeding the results, use the only result in the list
-# 		plateauLabel = []
-# 		plateauLabel.append(labelLS[1])
-# 	print plateauLabel
-#
-#
-# 	if len(plateauLabel) == 1:
-#
-# 		plateauIndex = labelLS.index(plateauLabel[0])
+	# 	comNumLS = comResults.readline()
+	# 	conNumLS = make_list(comNumLS, "int")
+	# 	print conNumLS
+	# 	m = max(labelLS)
+	#
+	# 	labelLStrim= [i for i in labelLS if i != m and i != 0]
+	# 	print labelLStrim
+	#
+	# 	if type == "Affinity" and labelLStrim != []:
+	#
+	# 		m = max(labelLStrim)
+	# 		print m
+	#
+	# 		labelLStrim= [i for i in labelLStrim if i != m]
+	# 		print labelLStrim
+	#
+	#
+	# 	if labelLStrim != []:  #if using traditional search for plateau, call mode_function
+	# 		plateauLabel = mode_function(labelLStrim)
+	# 	else:  #if using automatic search and feeding the results, use the only result in the list
+	# 		plateauLabel = []
+	# 		plateauLabel.append(labelLS[1])
+	# 	print plateauLabel
+	#
+	#
+	# 	if len(plateauLabel) == 1:
+	#
+	# 		plateauIndex = labelLS.index(plateauLabel[0])
 
 	#plateauLambda = lambdaLS[0]
 	plateauLambda = plateau
@@ -168,12 +188,12 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 					if m:
 						print m
 						bipart = m.group(1)
-#						print bipart
+	#						print bipart
 						freq = m.group(2)
 						bipartLS = []
 						for c in bipart:
 							bipartLS.append(c)
-#						print bipartLS
+	#						print bipartLS
 						indices = [x+1 for x, y in enumerate(bipartLS) if y == '1']
 						for k in indices:
 							pattern2 = re.compile("(.+) , "+str(k))
@@ -187,50 +207,21 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 			comKey.write("\n")
 		comKey.close()
 
-
-
-
-
-
-
-
-
-
 	if type == "Affinity":
 		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
-
 	return plateauLambda
-
-
 
 
 def main():
 	clvPath = sys.argv[1]
 	inNexus = sys.argv[2]
 	model = sys.argv[3]
-	plateau = sys.argv[4]
-	network = sys.argv[5]
-	rooted = sys.argv[6]
+	network = sys.argv[4]
+	rooted = sys.argv[5]
 
-	'''
-	for file in os.listdir('.'):
-		if fnmatch.fnmatch(file, inNexus):
-			if rooted == '1':
-				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-rooted')
-			else:
-				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-unrooted')
 
-	tlst.write_to_path("all_trees.pre.nex",'nexus', simple=True, translate_tree_taxa=True)
-	
-	with open("all_trees.nex", "w") as fout:
-		with open("all_trees.pre.nex", "r") as fin:
-			for line in fin:
-				fout.write(re.sub('END;\n', 'END;',line))
-
-	os.system("rm all_trees.pre.nex")
-	'''
 	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
@@ -238,17 +229,36 @@ def main():
 	
 	if network == 'Covariance':
 
+		# Run automatic plateau finder
+		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm auto -hf .95 -lf .05" % (clvPath, treeSet, rooted, model)+\
+	 	" > %s_CovAuto.out" %  treeSet)
+
+	 	# Get middle of largest plateau
+		outFile = "%s_CovAuto.out" %  treeSet
+		plateau = autoFindlambda(outFile)
+
+		# Run manual plateau
+		# Outputs community structure for current lambda values
 	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
-	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
-	 	# get output file from previous run
+	 	" > %s_CovCommunity.out" %  treeSet)
+
+	 	# Get output file from previous run
 	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
-	 	# change name, might want to turn this into cp instead of mv
+	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
 
 	if network == 'Affinity':
+
+		# Run automatic plateau finder
+		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Affinity -cm %s -lm auto -dm URF -am Exp" % (clvPath, treeSet, rooted, model)+\
+	 	" > %s_AffAuto.out" %  treeSet)
+
+	 	# Get middle of largest plateau
+		outFile = "%s_AffAuto.out" %  treeSet
+		plateau = autoFindlambda(outFile)
 
 		# Re-run Treescaper with manual plateau
 

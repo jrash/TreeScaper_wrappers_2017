@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="fix git script"
+message="Auto get lambda values"
 
 echo $message
 
