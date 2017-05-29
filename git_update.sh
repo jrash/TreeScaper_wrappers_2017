@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Auto get lambda values"
+message="Remove output files"
 
 echo $message
 
