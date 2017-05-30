@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Remove output files"
+message="Commenting scripts and removing seemingly unnessecary parts"
 
 echo $message
 

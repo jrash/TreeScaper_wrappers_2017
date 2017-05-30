@@ -38,20 +38,20 @@ from tempfile import mkstemp
 
 
 def make_list(pre_ls,convert):
+	# Turns tab delimited line into a list. 
 	pre_ls = pre_ls.split("\t")
 	ls = [i for i in pre_ls if i != "\n"]
 	if convert == "int":
 		ls = [int(i) for i in ls]
 	if convert == "float":
 		ls = [float(i) for i in ls]
-# 	ls = ls[1:]
-	# print("list - "+str(ls))
+	#ls = ls[1:]
+	#print("list - "+str(ls))
 	return ls
 
 
 def reg_ex_match(file, pattern):
-#returns the first match of a reg ex search
-
+	# Returns the first match of a reg ex search
 	file.seek(0)
 	for line in file:
 		m = pattern.match(line)
@@ -59,6 +59,8 @@ def reg_ex_match(file, pattern):
 			return m.group(1)
 
 def autoFindlambda(inOutFile):
+	# Currently pulls out largest plateau found in auto run. 
+	# Would be useful to also pull out all possibly plateaus. 
 	largePlateau=[]
 	allPlateaus=[]
 	pattern = 'The found plateaus are:'
@@ -82,7 +84,8 @@ def autoFindlambda(inOutFile):
 
 
 def mode_function(lst):
-	#Returns a list of all the possible plateaus
+	# Returns a list of all the possible plateaus
+	# Not sure what input is. 
 
 	counterLst = Counter(lst)
 	_,val = counterLst.most_common(1)[0]
@@ -108,10 +111,10 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 	if type == "Covariance":
 		comResults = open("%s_CovWholeCommunity_results.out" % treeSetTrunc)
-		#plateauLambda = 0.06
+
 	if type == "Affinity":
 		comResults = open("%s_AffWholeCommunity_results.out" % treeSetTrunc)
-		#plateauLambda = 0.6
+		
 	labelLS_header = comResults.readline()
 	labelLS = comResults.readline()
 	labelLS = make_list(labelLS, "int")
