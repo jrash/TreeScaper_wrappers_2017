@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Avoid adding repetitive numbers to original .nex file"
+message="small edits"
 
 echo $message
 
