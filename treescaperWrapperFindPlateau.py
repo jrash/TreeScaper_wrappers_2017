@@ -106,7 +106,7 @@ def mode_function(lst):
 		return modeLS
 	
 	
-def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
+def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 	# Get info shit and output some files
 
 	if type == "Covariance":
@@ -167,8 +167,6 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLamb
 		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
-	return plateauLambda
-
 
 def main():
 	clvPath = sys.argv[1]
@@ -206,10 +204,9 @@ def main():
 
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
-	 	print("Create extra output files")
-	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 
-	 	print("platLambd"+str(plateauLambda))
+	 	print("Parse output into useful information")
+	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 
 	if network == 'Affinity':
 
@@ -233,10 +230,9 @@ def main():
 
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 #
-		plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
-		print("platLambd "+str(plateauLambda))
-#
-		if plateauLambda:
+		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+	
+		if plateau:
 			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
 	print(type(treeSetTrunc))
  	os.system("sumtrees.py -r -o %s.con %s" % (treeSetTrunc, inNexus))

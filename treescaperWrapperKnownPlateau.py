@@ -83,7 +83,7 @@ def mode_function(lst):
 		return modeLS
 	
 	
-def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
+def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 
 	if type == "Covariance":
 
@@ -144,11 +144,6 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLamb
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
 
 
-	return plateauLambda
-
-
-
-
 def main():
 	clvPath = sys.argv[1]
 	inNexus = sys.argv[2]
@@ -202,9 +197,9 @@ def main():
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
 
-	 	print("Create extra output files")
-	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
-	 	print("platLambd"+str(plateauLambda))
+	 	print("Parse output into useful information")
+	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+
 
 	if network == 'Affinity':
 
@@ -220,11 +215,11 @@ def main():
 
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 
-		plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
-		print("platLambd "+str(plateauLambda))
-		if plateauLambda:
+		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		
+		if plateau:
 			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
-	print(type(treeSetTrunc))
+
  	os.system("sumtrees.py -r -o %s.con %s" % (treeSetTrunc, inNexus))
 	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
