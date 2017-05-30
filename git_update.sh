@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Commenting and cleaning up wrappers"
+message="Adding timekeeping to wrappers"
 
 echo $message
 

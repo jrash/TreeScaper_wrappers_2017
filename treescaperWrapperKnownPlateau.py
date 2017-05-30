@@ -1,26 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#Usage: treescaperWrapperKnownPlateau.py [CLV path] [model] [plateau] [network] [rooted]
-#[model] can be CNM/CPM/ERNM/NNM
 
-#***Check the ./CLVTreescaper settings within the script.  You might want to run ./CLVTreescaper with different options.  
-# Make sure the numbering of all the indices is correct. The developers have changed between starting at 1 and starting at 0.  
-# This includes the affinityCommunities script that is imported into this script.
+#### Input
 
-#useful if you have found the plateau with the automatic search function of the treescaper GUI.  If you enter the lambda values where the plateau was found for both affinity and covariance matrices, you will get all the useful output of treescaperWrapperV2.py.  See treescaperWrapperV2.py for usage and output.
+# Usage: treescaperWrapperKnownPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] [PlateauLambda] 
+# [model] can be CNM/CPM/ERNM/NNM
+# [network] can be Covariance/Affinity
+# See main() for additional CLVTreeScaper options
 
-#output files
 
-# ['type'] can be Covariance or Affinity
-# ['treeset'] tree set name
-# ['plateauLambda'] the lambda value were the plateau was found
+#### Output 
 
-#['treeset']_['type']WholeCommunity_results.out: community results over the whole range of lambda values
-#['treeset']_CovPlateauCommunity.out: community structure of the plateau
-#['treeset']_comKey.out: key showing you which bipartitions are in which communities
+#['inputTrees']_['network']WholeCommunity_results.out: community results over the whole range of lambda values when auto plateau is run.
+#['inputTrees']_CovCommunity.out: community structure of the plateau with fixed lambda
+#['inputTrees']_comKey.out: key showing you which bipartitions are in which communities
 # AffinityCom[number].nex: a nexus file of the trees in an affinity community
 # AffinityCom[number].nex.con: consensus tree of an affinity community
 # AffinityCom[number].nex.con.pdf: pdf of consensus tree of an affinity community
+# There are additional output files not described here yet. Please feel free to fill in! 
+
+#### Additional Notes
+# Double check indexing of nexus file vs trees assigned to Affinity communities. This script should be able to handle nexus counting from 0 or from 1. Will break if Treescaper counts from 1. 
+# affinityCommunities script has been incorperated into this script
+
 
 import re
 import os
@@ -28,6 +30,7 @@ import sys
 import glob
 import numpy as np
 import fnmatch
+import time
 from collections import Counter
 import filecmp
 import dendropy
@@ -36,6 +39,7 @@ import heapq
 from shutil import move, copyfile
 from tempfile import mkstemp
 
+startTime = time.time()
 
 def make_list(pre_ls,convert):
 	pre_ls = pre_ls.split("\t")
@@ -218,9 +222,9 @@ def main():
 	clvPath = sys.argv[1]
 	inNexus = sys.argv[2]
 	model = sys.argv[3]
-	plateau = sys.argv[4]
-	network = sys.argv[5]
-	rooted = sys.argv[6]
+	network = sys.argv[4]
+	rooted = sys.argv[5]
+	plateau = sys.argv[6]
 
 	# Manually edit below values if needed. 
 	w = 0
@@ -260,63 +264,99 @@ def main():
 	os.system("rm all_trees.pre.nex")
 	'''
 
+	# Get some strings for naming files
 	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
 	os.system("echo 'Hello There'")
+	
+	# Open file for keeping track of time
+	timeFile = open( "%s_%s_Time.out" % (inNexus, network) , 'w' )
 
 	if network == 'Covariance':
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
 		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
+		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
+	 	endTime1 = time.time()
 
 	 	# Run automatic plateau finder
 	 	print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
+	 	startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
-
+		endTime2 = time.time()
 	 	# Get output file from automatic run
 	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
 
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-
 	 	print("Parse output into useful information")
+	 	startTime3 = time.time()
 	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
-
+	 	endTime3 = time.time()
 
 	if network == 'Affinity':
 
 		# Run Treescaper with manual plateau
 		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
+		startTime1 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
 		" > %s_AffCommunity.out" %  treeSet)
+		endTime1 = time.time()
 
 		# Run automatic plateau finder
 		print("Running automatic. Log file: %s_AffAuto.out" %  treeSet)
+		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm auto -dm %s -am %s" % (clvPath, treeSet, w, rooted, model, dm, am)+\
 		" > %s_AffAuto.out" %  treeSet)
+		endTime2 = time.time()
 
 		# Get output file from automatic run
 		aCar=glob.glob('%s*_Affinity-*community_auto_results.out' % (treeSetTrunc))
 
 		# Change name, might want to turn this into cp instead of mv
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
-
 		print("Parse output into useful information")
+		startTime3 = time.time()
 		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		endTime3 = time.time()
 
+	# If you've screwed something up...
+
+	if (network != 'Affinity') and (network != 'Covariance'):
+		print("Check spelling and order of input values")
+
+	# Make consensus tree for inNexus
+	print("Building consensus tree for input file. Out file: dendropy_%s.out" %  treeSetTrunc)
+	startTime4 = time.time()
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
+ 	endTime4 = time.time()
+
+ 	# Add FigTree block to file, need to get CLVFigTree working
 	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
+	#os.system("cat RAxML_bestTree.G1_gene* > RAxML_allTree.G1.tre")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))
 
+	endTime = time.time()
+	
+	# Calculate time for each section, write to file. 
+	
+	time1 = "Manual_CLVTreeScaper:\t"+str(round(endTime1 - startTime1, 5))
+	time2 = "Automatic_CLVTreeScaper:\t"+str(round(endTime2 - startTime2, 5))
+	time3 = "File_Parsing:\t"+str(round(endTime3 - startTime3, 5))
+	time4 = "SumTree_inNexus:\t"+str(round(endTime4 - startTime4, 5))
+	timeAll = "Total_time:\t"+str(round(endTime - startTime, 5))
 
-	#os.system("cat RAxML_bestTree.G1_gene* > RAxML_allTree.G1.tre")
+	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
+	timeFile.close()
+
+
 if __name__=='__main__':
 	main()
