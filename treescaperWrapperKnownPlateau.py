@@ -30,7 +30,6 @@ import numpy as np
 import fnmatch
 from collections import Counter
 import filecmp
-from AffinityCommunities import affinityCommunityConsensus
 import dendropy
 import StringIO
 import heapq
