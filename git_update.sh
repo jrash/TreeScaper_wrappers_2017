@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="small edits"
+message="fix new branch script"
 
 echo $message
 
