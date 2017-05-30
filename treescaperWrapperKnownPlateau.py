@@ -192,10 +192,12 @@ def main():
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
+		print("Run manual, output - %s_CovCommunity.out" %  treeSet)
 	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
 
 	 	# Run automatic plateau finder
+	 	print("Run automatic, output - %s_CovAuto.out" %  treeSet)
 		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm auto -hf .95 -lf .05" % (clvPath, treeSet, rooted, model)+\
 	 	" > %s_CovAuto.out" %  treeSet)
 
@@ -204,7 +206,7 @@ def main():
 
 	 	# change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
-
+	 	print("get_plateau")
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
 
