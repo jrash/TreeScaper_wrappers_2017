@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Adding timekeeping to wrappers"
+message="Avoid adding repetitive numbers to original .nex file"
 
 echo $message
 

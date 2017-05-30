@@ -6,6 +6,7 @@
 # Usage: treescaperWrapperKnownPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] [PlateauLambda] 
 # [model] can be CNM/CPM/ERNM/NNM
 # [network] can be Covariance/Affinity
+# [inputTrees.nex] Need nexus file with translate block. This file will be modified. Trees will be numbered [1]-[#trees]
 # See main() for additional CLVTreeScaper options
 
 
@@ -72,10 +73,16 @@ def edit_treeset(treeFileEditPath):
 	tempFile = open(absPath,'w')
 	for line in treeFileEdit:
 		if line.find('[&U]') != -1: # Need to have this in every line with a tree! This will be [&U] for unrooted trees and [&R] for rooted
- 			tempFile.write(line.replace('=','['+str(lineNum)+']='))
+			if line.find('['+str(lineNum)+']') != -1:
+				tempFile.write(line)
+			else:
+ 				tempFile.write(line.replace('=','['+str(lineNum)+']='))
 			lineNum += 1
 		elif line.find('[&R]') != -1: # Need to have this in every line with a tree! This will be [&U] for unrooted trees and [&R] for rooted
- 			tempFile.write(line.replace('=','['+str(lineNum)+']='))
+			if line.find('['+str(lineNum)+']') != -1:
+				tempFile.write(line)
+			else:
+ 				tempFile.write(line.replace('=','['+str(lineNum)+']='))
 			lineNum += 1
 		else:
 			tempFile.write(line)
@@ -137,7 +144,7 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 							comTreeSet.write(line)
 							treeCount += 1
 				else:
-					# Adjust for Nexus file counting from 1. 
+					# Adjust for Nexus file counting from 1. edit_treeset should renumber starting at 1 unless trees were already numbered. 
 					for j in comLs:
 						k = int(j) + 1
 						#print("j: "+str(j))
@@ -347,7 +354,7 @@ def main():
 	endTime = time.time()
 	
 	# Calculate time for each section, write to file. 
-	
+
 	time1 = "Manual_CLVTreeScaper:\t"+str(round(endTime1 - startTime1, 5))
 	time2 = "Automatic_CLVTreeScaper:\t"+str(round(endTime2 - startTime2, 5))
 	time3 = "File_Parsing:\t"+str(round(endTime3 - startTime3, 5))

@@ -88,7 +88,6 @@ def autoFindlambda(inOutFile):
 def edit_treeset(treeFileEditPath):
 	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
 
-	print treeFileEditPath
 	treeFileEdit = open(treeFileEditPath, 'r')
 
 	lineNum = 1
@@ -97,10 +96,16 @@ def edit_treeset(treeFileEditPath):
 	tempFile = open(absPath,'w')
 	for line in treeFileEdit:
 		if line.find('[&U]') != -1: # Need to have this in every line with a tree! This will be [&U] for unrooted trees and [&R] for rooted
- 			tempFile.write(line.replace('=','['+str(lineNum)+']='))
+			if line.find('['+str(lineNum)+']') != -1:
+				tempFile.write(line)
+			else:
+ 				tempFile.write(line.replace('=','['+str(lineNum)+']='))
 			lineNum += 1
 		elif line.find('[&R]') != -1: # Need to have this in every line with a tree! This will be [&U] for unrooted trees and [&R] for rooted
- 			tempFile.write(line.replace('=','['+str(lineNum)+']='))
+			if line.find('['+str(lineNum)+']') != -1:
+				tempFile.write(line)
+			else:
+ 				tempFile.write(line.replace('=','['+str(lineNum)+']='))
 			lineNum += 1
 		else:
 			tempFile.write(line)
