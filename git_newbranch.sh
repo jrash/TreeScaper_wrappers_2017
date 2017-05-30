@@ -1,6 +1,9 @@
 #!/bin/bash
+# Run this from one folder above your git folder
 
-new_branch='ggm_May26'
+cd ./TreeScaper_wrappers_2017
+
+new_branch='ggm_May28'
 
 
 git branch $new_branch

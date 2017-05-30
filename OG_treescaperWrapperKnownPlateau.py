@@ -85,52 +85,7 @@ def mode_function(lst):
 		return modeLS
 	
 	
-def get_plateau(treeSet, treeSetTrunc, type, model, rooted):
-
-
-	if type == "Covariance":
-		comResults = open("%s_CovWholeCommunity_results.out" % treeSetTrunc)
-	if type == "Affinity":
-		comResults = open("%s_AffWholeCommunity_results.out" % treeSetTrunc)
-	labelLS = comResults.readline()
-	labelLS = make_list(labelLS, "int")
-	print labelLS
-
-	lambdaLS = comResults.readline()
-	lambdaLS = make_list(lambdaLS,"float")
-	print lambdaLS
-
-# 	comNumLS = comResults.readline()
-# 	conNumLS = make_list(comNumLS, "int")
-# 	print conNumLS
-# 	m = max(labelLS)
-#
-# 	labelLStrim= [i for i in labelLS if i != m and i != 0]
-# 	print labelLStrim
-#
-# 	if type == "Affinity" and labelLStrim != []:
-#
-# 		m = max(labelLStrim)
-# 		print m
-#
-# 		labelLStrim= [i for i in labelLStrim if i != m]
-# 		print labelLStrim
-#
-#
-# 	if labelLStrim != []:  #if using traditional search for plateau, call mode_function
-# 		plateauLabel = mode_function(labelLStrim)
-# 	else:  #if using automatic search and feeding the results, use the only result in the list
-# 		plateauLabel = []
-# 		plateauLabel.append(labelLS[1])
-# 	print plateauLabel
-#
-#
-# 	if len(plateauLabel) == 1:
-#
-# 		plateauIndex = labelLS.index(plateauLabel[0])
-
-	plateauLambda = lambdaLS[0]
-	print plateauLambda
+def get_plateau(treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 
 	if type == "Covariance":
 		os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
@@ -181,15 +136,6 @@ def get_plateau(treeSet, treeSetTrunc, type, model, rooted):
 			comKey.write("\n")
 		comKey.close()
 
-
-
-
-
-
-
-
-
-
 	if type == "Affinity":
 		os.system("/home/vestige/Documents/BrownLabJash/Programs/bin/treescaper_scripts_2017/CLVTreeScaper -trees "+\
 		"-f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (treeSet, rooted, model, plateauLambda)+\
@@ -239,7 +185,7 @@ def main():
 	 	" > %s_CovCommunity.out" %  treeSet)#outputs community structure for current lambda values
 	 	os.system("mv %s_Covariance\ Matrix_community_results.out %s_CovWholeCommunity_results.out" % (treeSetTrunc,treeSetTrunc))
 
-	 	plateauLambda = get_plateau(treeSet, treeSetTrunc, "Covariance", model, rooted)
+	 	plateauLambda = get_plateau(treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 
 	if network == 'Affinity':
 
@@ -248,7 +194,7 @@ def main():
 		" > %s_AffCommunity.out" %  treeSet)#outputs community structure for current lambda values
 		os.system("mv %s_Affinity-URF_community_results.out %s_AffWholeCommunity_results.out" % (treeSetTrunc, treeSetTrunc))
 
-		plateauLambda = get_plateau(treeSet, treeSetTrunc, "Affinity", model, rooted)
+		plateauLambda = get_plateau(treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 
 		if plateauLambda:
 			affinityCommunityConsensus(treeSet, model ,plateauLambda, rooted)

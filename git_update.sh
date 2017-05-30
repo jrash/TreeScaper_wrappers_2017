@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="delete output file"
+message="small edits"
 
 echo $message
 

@@ -3,10 +3,9 @@
 
 #### Input
 
-# Usage: treescaperWrapperKnownPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] [PlateauLambda] 
+# Usage: treescaperWrapperFindPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] [PlateauLambda] 
 # [model] can be CNM/CPM/ERNM/NNM
 # [network] can be Covariance/Affinity
-# [inputTrees.nex] Need nexus file with translate block. This file will be modified. Trees will be numbered [1]-[#trees]
 # See main() for additional CLVTreeScaper options
 
 
@@ -43,24 +42,48 @@ from tempfile import mkstemp
 startTime = time.time()
 
 def make_list(pre_ls,convert):
+	# Turns tab delimited line into a list. 
 	pre_ls = pre_ls.split("\t")
 	ls = [i for i in pre_ls if i != "\n"]
 	if convert == "int":
 		ls = [int(i) for i in ls]
 	if convert == "float":
 		ls = [float(i) for i in ls]
-	# ls = ls[1:]
-	# print("list - "+str(ls))
+	#ls = ls[1:]
+	#print("list - "+str(ls))
 	return ls
 
 def reg_ex_match(file, pattern):
 	# Returns the first match of a reg ex search
-
 	file.seek(0)
 	for line in file:
 		m = pattern.match(line)
 		if m:
 			return m.group(1)
+
+def autoFindlambda(inOutFile):
+	# Currently pulls out largest plateau found in auto run. 
+	# Would be useful to also pull out all possibly plateaus. 
+	largePlateau=[]
+	allPlateaus=[]
+	pattern = 'The found plateaus are:'
+	with open(inOutFile , 'r' ) as file:
+		for line in file:
+			if pattern in line:
+				# This pulls both the largest plateau, and a line containing all lambdas
+				# The second occurance isnt parse properly in this script. But keeping it for parsing later if needed.
+				a = (next(file,'').strip())
+				b = a.split(",")[0].strip("[")
+				c = a.split(",")[1].strip("]")
+				# Store both lines for later use
+				allPlateaus.append(a)
+				# Add first and second numbers
+				largePlateau.append(b)
+				largePlateau.append(c)
+	# Pull out largest plateau and get lambda in middle of it. 
+	plat = [float(largePlateau[0]), float(largePlateau[1])]
+	manLamdba = np.mean(plat)
+	return manLamdba
 
 def edit_treeset(treeFileEditPath):
 	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
@@ -99,7 +122,7 @@ def edit_treeset(treeFileEditPath):
 def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 	# Best function ever
 	# Parses communities and associate trees. Creates a nexus file and consensus tree for each community. 
-
+	
 	if model not in ('CPM','ERNM','CNM','NNM'):
 		print "invalid model choose CPM, ERNM, CNM, or NNM"
 		model = raw_input('Enter Model: ')
@@ -144,7 +167,7 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 							comTreeSet.write(line)
 							treeCount += 1
 				else:
-					# Adjust for Nexus file counting from 1. edit_treeset should renumber starting at 1 unless trees were already numbered. 
+					# Adjust for Nexus file counting from 1. 
 					for j in comLs:
 						k = int(j) + 1
 						#print("j: "+str(j))
@@ -167,6 +190,7 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		#os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
 	
 def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
+	# Get info shit and output some files
 
 	if type == "Covariance":
 
@@ -221,9 +245,9 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 				comKey.write("%s %s\n" % (indices,freq))
 			comKey.write("\n")
 		comKey.close()
-
 	if type == "Affinity":
 		affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
+
 
 def main():
 	clvPath = sys.argv[1]
@@ -231,7 +255,7 @@ def main():
 	model = sys.argv[3]
 	network = sys.argv[4]
 	rooted = sys.argv[5]
-	plateau = sys.argv[6]
+	startTime = time.time()
 
 	# Manually edit below values if needed. 
 	w = 0
@@ -251,36 +275,31 @@ def main():
 	#dm: Indicates the distance metric. Options are: ‘URF’: Unweighted 	Robinson-Foulds distance. ‘RF’: Weighted Robinson-Foulds distance. ‘Mat’: 	Matching distance. ‘SPR’: Subtree-Prune-Regraft
 	#am: Indicates the distance to affinity transformation. Options are: ‘Rec’: Reciprocal. ‘Exp’: Exponential
 
-	'''
-	# Use to input a translate block with dendropy. The wrong version of dendropy actually deletes the translate block. So use careully. 
-
-	for file in os.listdir('.'):
-		if fnmatch.fnmatch(file, inNexus):
-			if rooted == '1':
-				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-rooted')
-			else:
-				tlst = dendropy.TreeList.get_from_path(inNexus, "nexus", rooting='force-unrooted')
-
-	tlst.write_to_path("all_trees.pre.nex",'nexus', simple=True, translate_tree_taxa=True)
-	
-	with open("all_trees.nex", "w") as fout:
-		with open("all_trees.pre.nex", "r") as fin:
-			for line in fin:
-				fout.write(re.sub('END;\n', 'END;',line))
-
-	os.system("rm all_trees.pre.nex")
-	'''
+	# See treescaperWrapperKnownPlateau.py for a script that can add a translate block via dendropy. Not used here because it was glitching on supermike. 
 
 	# Get some strings for naming files
 	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
-	os.system("echo 'Hello There'")
-	
+
 	# Open file for keeping track of time
 	timeFile = open( "%s_%s_Time.out" % (inNexus, network) , 'w' )
 
+
+	os.system("echo 'Hello There'")
+	
 	if network == 'Covariance':
+
+		# Run automatic plateau finder
+		print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
+		startTime2 = time.time()
+		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
+	 	" > %s_CovAuto.out" %  treeSet)
+		endTime2 = time.time()
+
+	 	# Get middle of largest plateau
+		outFile = "%s_CovAuto.out" %  treeSet
+		plateau = autoFindlambda(outFile)
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
@@ -289,13 +308,6 @@ def main():
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
 	 	endTime1 = time.time()
-
-	 	# Run automatic plateau finder
-	 	print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
-	 	startTime2 = time.time()
-		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
-	 	" > %s_CovAuto.out" %  treeSet)
-		endTime2 = time.time()
 	 	# Get output file from automatic run
 	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
 
@@ -309,13 +321,6 @@ def main():
 
 	if network == 'Affinity':
 
-		# Run Treescaper with manual plateau
-		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
-		startTime1 = time.time()
-		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
-		" > %s_AffCommunity.out" %  treeSet)
-		endTime1 = time.time()
-
 		# Run automatic plateau finder
 		print("Running automatic. Log file: %s_AffAuto.out" %  treeSet)
 		startTime2 = time.time()
@@ -323,36 +328,50 @@ def main():
 		" > %s_AffAuto.out" %  treeSet)
 		endTime2 = time.time()
 
+		# Get middle of largest plateau
+		outFile = "%s_AffAuto.out" %  treeSet
+		plateau = autoFindlambda(outFile)
+
+		# Run Treescaper with manual plateau
+		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
+		startTime1 = time.time()
+		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
+		" > %s_AffCommunity.out" %  treeSet)
+		endTime1 = time.time()
+
 		# Get output file from automatic run
 		aCar=glob.glob('%s*_Affinity-*community_auto_results.out' % (treeSetTrunc))
 
 		# Change name, might want to turn this into cp instead of mv
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
+
 		print("Parse output into useful information")
 		startTime3 = time.time()
 		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		endTime3 = time.time()
+
 
 	# If you've screwed something up...
 
 	if (network != 'Affinity') and (network != 'Covariance'):
 		print("Check spelling and order of input values")
 
+
 	# Make consensus tree for inNexus
 	print("Building consensus tree for input file. Log file: dendropy_%s.out" %  treeSetTrunc)
-	startTime4 = time.time()
+ 	startTime4 = time.time()
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
  	endTime4 = time.time()
 
  	# Add FigTree block to file, need to get CLVFigTree working
 	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
-	#os.system("cat RAxML_bestTree.G1_gene* > RAxML_allTree.G1.tre")
+ 	#os.system("cat RAxML_bestTree.G1_gene* > RAxML_allTree.G1.tre")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))
 
 	endTime = time.time()
-	
+
 	# Calculate time for each section, write to file. 
 
 	time1 = "Manual_CLVTreeScaper:\t"+str(round(endTime1 - startTime1, 5))
@@ -360,10 +379,9 @@ def main():
 	time3 = "File_Parsing:\t"+str(round(endTime3 - startTime3, 5))
 	time4 = "SumTree_inNexus:\t"+str(round(endTime4 - startTime4, 5))
 	timeAll = "Total_time:\t"+str(round(endTime - startTime, 5))
-
+	
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
-
 
 if __name__=='__main__':
 	main()
