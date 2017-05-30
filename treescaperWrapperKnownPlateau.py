@@ -107,43 +107,37 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLamb
 				# Bipartitions count from 1 while nodes count from 0.
 				j = int(j)+1
 				pattern = re.compile("bipartition "+str(j)+" : ([0-1]+?), appear times: ([0-9]+?)$")
-				print("bipartition "+str(j)+' : '+str(pattern))
 				# Some file copying, temporary
 				fh, absPath = mkstemp()
 				copyfile("%s_CovCommunity.out" %  treeSet, absPath)
 				comTempFile = open(absPath,'r')
-				# Grab bipartitions and number of times they appear
+				# Grab bipartitions
 				for line in comTempFile:
 					m = pattern.match(line)
 					if m:
+						# Grab binary code for bipartition
 						bipart = m.group(1)
-						print("Bipart: "+str(bipart))
+						print("Bipartion "+str(j)+" : "+str(bipart))
+						# Grab number of times bipartition occurs
 						freq = m.group(2)
 						bipartLS = []
+						# Create list from binary code
 						for c in bipart:
 							bipartLS.append(c)
-							print("BipartLS: "+str(bipartLS))
+						# Create a list of taxa included in each bipartition
 						indices = [x+1 for x, y in enumerate(bipartLS) if y == '1']
+						# Get taxon names
 						for k in indices:
 							pattern2 = re.compile("(.+) , "+str(k))
 							taxon = reg_ex_match(comFile, pattern2)
 							indices[indices.index(k)] = taxon
-				 #close temp file
+				# Close temp file
 				comTempFile.close()
 				os.close(fh)
-
+				# Write taxon and frequency for bipartitions in communit
 				comKey.write("%s %s\n" % (indices,freq))
 			comKey.write("\n")
 		comKey.close()
-
-
-
-
-
-
-
-
-
 
 	if type == "Affinity":
 		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
@@ -192,21 +186,23 @@ def main():
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Run manual, output - %s_CovCommunity.out" %  treeSet)
+		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
 	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
 
 	 	# Run automatic plateau finder
-	 	print("Run automatic, output - %s_CovAuto.out" %  treeSet)
+	 	print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
 		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm auto -hf .95 -lf .05" % (clvPath, treeSet, rooted, model)+\
 	 	" > %s_CovAuto.out" %  treeSet)
 
-	 	# get output file from automatic run
+	 	# Get output file from automatic run
 	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
 
-	 	# change name, might want to turn this into cp instead of mv
+	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
-	 	print("get_plateau")
+
+
+	 	print("Create extra output files")
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
 

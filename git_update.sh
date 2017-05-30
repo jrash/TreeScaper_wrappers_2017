@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Commenting scripts and removing seemingly unnessecary parts"
+message="Commenting and cleaning up wrappers"
 
 echo $message
 
