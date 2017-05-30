@@ -1,2 +1,0 @@
-treescaperWrapperKnownPlateau.py ./CLVTreeScaper all_trees.nex CPM Affinity 1
-
