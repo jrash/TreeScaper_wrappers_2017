@@ -106,12 +106,9 @@ def mode_function(lst):
 		return modeLS
 	
 	
-def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
-
-
-	plateauLambda = plateau
-	print("plateau lambda: "+str(plateauLambda))
-
+def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
+	# Get info shit and output some files
+	
 	if type == "Covariance":
 		os.system( "%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
@@ -201,7 +198,7 @@ def main():
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 #
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
-	 	
+
 	 	print("platLambd"+str(plateauLambda))
 
 	if network == 'Affinity':
