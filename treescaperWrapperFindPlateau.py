@@ -108,42 +108,45 @@ def mode_function(lst):
 	
 def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 	# Get info shit and output some files
-	
+
 	if type == "Covariance":
-		os.system( "%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
-		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
 
-
-		comFile = open("%s_CovPlateauCommunity.out" %  treeSetTrunc, 'r')
+		# Open out file from manual run
+		comFile = open("%s_CovCommunity.out" %  treeSet, 'r')
 		pattern = re.compile('Number of communities: (\d+)')
 		coms = int(reg_ex_match(comFile, pattern))
 		comKey = open("%s_comKey.out" %  treeSetTrunc, 'w')
 
-		for i in range(1, coms+1): # makes a key to decode the bipartitions in each community
+		# Makes a key to decode the bipartitions in each community
+		for i in range(1, coms+1): 
+			# Get nodes for each community
 			pattern = re.compile('Community '+str(i)+' includes nodes: (.+)')
 			comStr = reg_ex_match(comFile, pattern)
 			comLS = comStr.split(",")
-			print comLS
+			print('Community '+str(i)+' includes nodes: '+str(comLS))
 			comLS = filter(None, comLS)
 			comKey.write("Com %s:\n" % i)
+			# For each node
 			for j in comLS:
+				# Bipartitions count from 1 while nodes count from 0.
 				j = int(j)+1
 				pattern = re.compile("bipartition "+str(j)+" : ([0-1]+?), appear times: ([0-9]+?)$")
-				print "bipartition "+str(j)+" : ([0-1]+?), appear times: ([0-9]+)"
+				print("bipartition "str(j)+' : '+str(pattern))
+				# Some file copying, temporary
 				fh, absPath = mkstemp()
-				copyfile("%s_CovPlateauCommunity.out" %  treeSetTrunc, absPath)
+				copyfile("%s_CovCommunity.out" %  treeSet, absPath)
 				comTempFile = open(absPath,'r')
+				# Grab bipartitions and number of times they appear
 				for line in comTempFile:
 					m = pattern.match(line)
 					if m:
-						print m
 						bipart = m.group(1)
-	#						print bipart
+							print("Bipart: "+str(bipart))
 						freq = m.group(2)
 						bipartLS = []
 						for c in bipart:
 							bipartLS.append(c)
-	#						print bipartLS
+							print("BipartLS: "+str(bipartLS))
 						indices = [x+1 for x, y in enumerate(bipartLS) if y == '1']
 						for k in indices:
 							pattern2 = re.compile("(.+) , "+str(k))
@@ -171,6 +174,7 @@ def main():
 	network = sys.argv[4]
 	rooted = sys.argv[5]
 
+	# See treescaperWrapperKnownPlateau.py for a script that can add a translate block via dendropy. Not used here because it was glitching on supermike. 
 
 	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
