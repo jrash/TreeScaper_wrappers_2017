@@ -109,60 +109,9 @@ def mode_function(lst):
 def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 
-	if type == "Covariance":
-		comResults = open("%s_CovWholeCommunity_results.out" % treeSetTrunc)
-
-	if type == "Affinity":
-		comResults = open("%s_AffWholeCommunity_results.out" % treeSetTrunc)
-
-	labelLS_header = comResults.readline()
-	labelLS = comResults.readline()
-	labelLS = make_list(labelLS, "int")
-	# labelLS is a list of two numbers, 1st number of bipartitions, 2nd unsure
-	# This does not appear to be used again in the script
-	print "label"
-	print labelLS
-
-	lambdaLS_header = comResults.readline()
-	lambdaLS = comResults.readline()
-	lambdaLS = make_list(lambdaLS,"float")
-	print "lambda"
-	print lambdaLS
-
-	# 	comNumLS = comResults.readline()
-	# 	conNumLS = make_list(comNumLS, "int")
-	# 	print conNumLS
-	# 	m = max(labelLS)
-	#
-	# 	labelLStrim= [i for i in labelLS if i != m and i != 0]
-	# 	print labelLStrim
-	#
-	# 	if type == "Affinity" and labelLStrim != []:
-	#
-	# 		m = max(labelLStrim)
-	# 		print m
-	#
-	# 		labelLStrim= [i for i in labelLStrim if i != m]
-	# 		print labelLStrim
-	#
-	#
-	# 	if labelLStrim != []:  #if using traditional search for plateau, call mode_function
-	# 		plateauLabel = mode_function(labelLStrim)
-	# 	else:  #if using automatic search and feeding the results, use the only result in the list
-	# 		plateauLabel = []
-	# 		plateauLabel.append(labelLS[1])
-	# 	print plateauLabel
-	#
-	#
-	# 	if len(plateauLabel) == 1:
-	#
-	# 		plateauIndex = labelLS.index(plateauLabel[0])
-
-	#plateauLambda = lambdaLS[0]
-#
 	plateauLambda = plateau
 	print("plateau lambda: "+str(plateauLambda))
-#
+
 	if type == "Covariance":
 		os.system( "%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
@@ -252,6 +201,7 @@ def main():
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 #
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+	 	
 	 	print("platLambd"+str(plateauLambda))
 
 	if network == 'Affinity':

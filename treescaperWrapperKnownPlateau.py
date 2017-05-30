@@ -215,6 +215,8 @@ def main():
 	rooted = sys.argv[6]
 
 	'''
+	# Use to input a translate block with dendropy. The wrong version of dendropy actually deletes the translate block. So use careully. 
+	
 	for file in os.listdir('.'):
 		if fnmatch.fnmatch(file, inNexus):
 			if rooted == '1':
