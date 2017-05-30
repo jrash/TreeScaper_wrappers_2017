@@ -107,7 +107,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLamb
 				# Bipartitions count from 1 while nodes count from 0.
 				j = int(j)+1
 				pattern = re.compile("bipartition "+str(j)+" : ([0-1]+?), appear times: ([0-9]+?)$")
-				print("bipartition "str(j)+' : '+str(pattern))
+				print("bipartition "+str(j)+' : '+str(pattern))
 				# Some file copying, temporary
 				fh, absPath = mkstemp()
 				copyfile("%s_CovCommunity.out" %  treeSet, absPath)
