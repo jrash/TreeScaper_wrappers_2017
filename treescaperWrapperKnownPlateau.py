@@ -135,8 +135,8 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 #
 # 		plateauIndex = labelLS.index(plateauLabel[0])
 
-	#plateauLambda = lambdaLS[0]
-	plateauLambda = plateau
+	plateauLambda = lambdaLS[0]
+	#plateauLambda = plateau
 	print("plateau lambda: "+str(plateauLambda))
 
 	if type == "Covariance":

@@ -114,7 +114,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 
 	if type == "Affinity":
 		comResults = open("%s_AffWholeCommunity_results.out" % treeSetTrunc)
-		
+
 	labelLS_header = comResults.readline()
 	labelLS = comResults.readline()
 	labelLS = make_list(labelLS, "int")
@@ -159,9 +159,10 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 	# 		plateauIndex = labelLS.index(plateauLabel[0])
 
 	#plateauLambda = lambdaLS[0]
+#
 	plateauLambda = plateau
 	print("plateau lambda: "+str(plateauLambda))
-
+#
 	if type == "Covariance":
 		os.system( "%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_CovPlateauCommunity.out" %  treeSetTrunc)
@@ -209,7 +210,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateau):
 				comKey.write("%s %s\n" % (indices,freq))
 			comKey.write("\n")
 		comKey.close()
-
+#
 	if type == "Affinity":
 		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
 		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
@@ -249,7 +250,7 @@ def main():
 	 	cmCar=glob.glob('%s*_Covariance_Matrix_*community_auto_results.out' % (treeSetTrunc))
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
-
+#
 	 	plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	print("platLambd"+str(plateauLambda))
 
@@ -274,9 +275,10 @@ def main():
 		aCar=glob.glob('%s*_Affinity-*community_auto_results.out' % (treeSetTrunc))
 
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
-
+#
 		plateauLambda = get_plateau(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		print("platLambd "+str(plateauLambda))
+#
 		if plateauLambda:
 			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
 	print(type(treeSetTrunc))
