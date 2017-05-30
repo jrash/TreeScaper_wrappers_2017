@@ -141,7 +141,7 @@ def get_plateau(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLamb
 					m = pattern.match(line)
 					if m:
 						bipart = m.group(1)
-							print("Bipart: "+str(bipart))
+						print("Bipart: "+str(bipart))
 						freq = m.group(2)
 						bipartLS = []
 						for c in bipart:
