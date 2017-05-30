@@ -214,7 +214,6 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 	if type == "Affinity":
 		affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
 
-
 def main():
 	clvPath = sys.argv[1]
 	inNexus = sys.argv[2]
@@ -222,6 +221,24 @@ def main():
 	plateau = sys.argv[4]
 	network = sys.argv[5]
 	rooted = sys.argv[6]
+
+	# Manually edit below values if needed. 
+	w = 0
+	# Covariance
+	ln_c = 1
+	hf = 0.95
+	lf = 0.05
+	# Affinity
+	ln_a = 0
+	dm = "URF"
+	am = "Exp"
+	# Info:
+	#w: Indicate whether trees are weighted. Options are: ‘1’: weighted. ‘0’: 	unweighted
+	#ln: Specify a fixed value of λ−. Must be between 0 and 1. Used when -lniv is zero.
+	#hf: Frequency upper bound. A number between 0 and 1. Nodes with frequencies above this value are ignored.
+	#lf: Frequency lower bound. A number between 0 and 1. Nodes with frequencies below this value are ignored.
+	#dm: Indicates the distance metric. Options are: ‘URF’: Unweighted 	Robinson-Foulds distance. ‘RF’: Weighted Robinson-Foulds distance. ‘Mat’: 	Matching distance. ‘SPR’: Subtree-Prune-Regraft
+	#am: Indicates the distance to affinity transformation. Options are: ‘Rec’: Reciprocal. ‘Exp’: Exponential
 
 	'''
 	# Use to input a translate block with dendropy. The wrong version of dendropy actually deletes the translate block. So use careully. 
@@ -246,19 +263,19 @@ def main():
 	treeSet=str(inNexus)
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
-	os.system("echo 'hi'")
-	
+	os.system("echo 'Hello There'")
+
 	if network == 'Covariance':
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
 		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
-	 	os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln 1 -hf .95 -lf .05" % (clvPath, treeSet, rooted, model, plateau)+\
+	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
 
 	 	# Run automatic plateau finder
 	 	print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
-		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Covariance -cm %s -lm auto -hf .95 -lf .05" % (clvPath, treeSet, rooted, model)+\
+		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
 
 	 	# Get output file from automatic run
@@ -276,12 +293,12 @@ def main():
 
 		# Run Treescaper with manual plateau
 		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
-		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
+		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
 		" > %s_AffCommunity.out" %  treeSet)
 
 		# Run automatic plateau finder
 		print("Running automatic. Log file: %s_AffAuto.out" %  treeSet)
-		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Affinity -cm %s -lm auto -dm URF -am Exp" % (clvPath, treeSet, rooted, model)+\
+		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm auto -dm %s -am %s" % (clvPath, treeSet, w, rooted, model, dm, am)+\
 		" > %s_AffAuto.out" %  treeSet)
 
 		# Get output file from automatic run
