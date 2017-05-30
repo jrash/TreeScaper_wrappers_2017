@@ -1,0 +1,6 @@
+AffinityCom1.nex	25	0.00% of trees
+AffinityCom2.nex	33	0.00% of trees
+AffinityCom3.nex	26	0.00% of trees
+AffinityCom4.nex	10	0.00% of trees
+AffinityCom5.nex	2	0.00% of trees
+AffinityCom6.nex	4	0.00% of trees

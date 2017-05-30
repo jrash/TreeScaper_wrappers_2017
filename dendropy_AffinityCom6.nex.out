@@ -1,0 +1,64 @@
+/==========================================================================\
+|                                 SumTrees                                 |
+|                     Phylogenetic Tree Summarization                      |
+|                       Version 4.0.0 (Jan 31 2015)                        |
+|                   By Jeet Sukumaran and Mark T. Holder                   |
+|      Using: DendroPy 4.0.2 (DendroPy4-e6c7ab0, 2015-06-10 12:12:40)      |
++--------------------------------------------------------------------------+
+|                                 Citation                                 |
+|                                 ~~~~~~~~                                 |
+| If any stage of your work or analyses relies on code or programs from    |
+| this library, either directly or indirectly (e.g., through usage of your |
+| own or third-party programs, pipelines, or toolkits which use, rely on,  |
+| incorporate, or are otherwise primarily derivative of code/programs in   |
+| this library), please cite:                                              |
+|                                                                          |
+|   Sukumaran, J and MT Holder. 2010. DendroPy: a Python library for       |
+|     phylogenetic computing. Bioinformatics 26: 1569-1571.                |
+|                                                                          |
+|   Sukumaran, J and MT Holder. SumTrees: Phylogenetic Tree Summarization. |
+|     4.0.0 (Jan 31 2015). Available at                                    |
+|     https://github.com/jeetsukumaran/DendroPy.                           |
+|                                                                          |
+| Note that, in the interests of scientific reproducibility, you should    |
+| describe in the text of your publications not only the specific          |
+| version of the SumTrees program, but also the DendroPy library used in   |
+| your analysis. For your information, you are running DendroPy 4.0.2      |
+| (DendroPy4-e6c7ab0, 2015-06-10 12:12:40).                                |
+\==========================================================================/
+
+SumTrees: Trees to be read from 1 source(s):
+SumTrees: - 'AffinityCom6.nex'
+SumTrees: Running in serial mode
+SumTrees: Analyzing: 'AffinityCom6.nex'
+SumTrees: Analysis of source trees completed in: 0.009565 seconds
+SumTrees: Total of 4 trees analyzed for summarization:
+SumTrees: - All trees were treated as unweighted
+SumTrees: - All trees were treated as rooted
+SumTrees: - 16 unique taxa across all trees
+SumTrees: - 30 unique splits out of a total of 120 splits
+SumTrees: - 13 unique non-trivial splits counted out of a total of non-trivial
+            52 splits
+SumTrees: Summarized onto consensus tree with minimum clade frequency
+          threshold of 0.5:
+SumTrees: - Support values expressed as proportions or probabilities
+SumTrees: - Edge lengths on target trees set to mean of edge lengths in
+            sources
+SumTrees: - Support and other summarization annotations added to target trees
+            as metadata
+SumTrees: Writing primary results to: 'AffinityCom6.nex.con'
+SumTrees: Summarization completed
+SumTrees: Started at: 2017-05-30 14:39:18.416118
+SumTrees: Ended at: 2017-05-30 14:39:18.504168
+SumTrees: Total elapsed time: 0.08805 seconds
+SumTrees: Actual analysis time: 0.009565 seconds
+DendroPy version      : DendroPy 4.0.2 (DendroPy4-e6c7ab0, 2015-06-10 12:12:40)
+DendroPy location     : /Users/ChatNoir/anaconda/DendroPy/dendropy
+Python version        : 2.7.13 |Anaconda 2.1.0 (x86_64)| (default, Dec 20 2016, 23:05:08) [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57)]
+Python executable     : /Users/ChatNoir/anaconda/bin/python
+Python site packages  : ['/Users/ChatNoir/anaconda/lib/python2.7/site-packages', '/Users/ChatNoir/anaconda/lib/site-python']
+DendroPy version      : DendroPy 4.0.2 (DendroPy4-e6c7ab0, 2015-06-10 12:12:40)
+DendroPy location     : /Users/ChatNoir/anaconda/DendroPy/dendropy
+Python version        : 2.7.13 |Anaconda 2.1.0 (x86_64)| (default, Dec 20 2016, 23:05:08) [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57)]
+Python executable     : /Users/ChatNoir/anaconda/bin/python
+Python site packages  : ['/Users/ChatNoir/anaconda/lib/python2.7/site-packages', '/Users/ChatNoir/anaconda/lib/site-python']

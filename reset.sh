@@ -1,5 +1,4 @@
 #!/bin/bash
-rm *.what
 rm *.out
 rm AffinityCom*.con
 rm AffinityCom*.nex

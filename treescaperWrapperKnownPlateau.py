@@ -45,13 +45,12 @@ def make_list(pre_ls,convert):
 		ls = [int(i) for i in ls]
 	if convert == "float":
 		ls = [float(i) for i in ls]
-# 	ls = ls[1:]
+	# ls = ls[1:]
 	# print("list - "+str(ls))
 	return ls
 
-
 def reg_ex_match(file, pattern):
-#returns the first match of a reg ex search
+	# Returns the first match of a reg ex search
 
 	file.seek(0)
 	for line in file:
@@ -59,29 +58,103 @@ def reg_ex_match(file, pattern):
 		if m:
 			return m.group(1)
 
+def edit_treeset(treeFileEditPath):
+	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
 
-def mode_function(lst):
-#Returns a list of all the possible plateaus
+	treeFileEdit = open(treeFileEditPath, 'r')
 
-
-	counterLst = Counter(lst)
-	_,val = counterLst.most_common(1)[0]
-	modeLS = [x for x,y in counterLst.items() if y == val]
-	lstNoMode = [x for x in lst if x not in modeLS] #remove all the values that are the mode of the list
-	if len(counterLst.most_common(2)) == 2: # find the next mode of the list
-		counterLstNoMode = Counter(lstNoMode)
-		_,val2 = counterLstNoMode.most_common(1)[0]
-		if val - val2 >= 2:
-			#if the largest plateau is bigger than the second largest by one increment, than its possible that the true size of the second largest
-			#plateau is bigger than the largest. The second largest plateau could encompass the space between the lambda value immediately below and immediately above its lambda range.  The second largest plateau could
-			#grow by 1.9999... increment and largest plateau could not grow at all. But if the largest plateau is bigger than the second largest by two or more increments, you are sure that plateau is the largest
-			#****newly added feature, not used for any of my results
-			return modeLS
+	lineNum = 1
+	# make a temp file
+	fh, absPath = mkstemp()
+	tempFile = open(absPath,'w')
+	for line in treeFileEdit:
+		if line.find('[&U]') != -1: # Need to have this in every line with a tree! This will be [&U] for unrooted trees and [&R] for rooted
+ 			tempFile.write(line.replace('=','['+str(lineNum)+']='))
+			lineNum += 1
+		elif line.find('[&R]') != -1: # Need to have this in every line with a tree! This will be [&U] for unrooted trees and [&R] for rooted
+ 			tempFile.write(line.replace('=','['+str(lineNum)+']='))
+			lineNum += 1
 		else:
-			return [x for x,y in counterLst.items() if y == val or y == val2]
-	else:
-		return modeLS
-	
+			tempFile.write(line)
+	# close temp file
+	tempFile.close()
+	os.close(fh)
+	treeFileEdit.close()
+	# Remove original file
+	os.remove(treeFileEditPath)
+	# Move new file
+	move(absPath, treeFileEditPath)
+	return lineNum
+
+def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
+	# Best function ever
+	# Parses communities and associate trees. Creates a nexus file and consensus tree for each community. 
+
+	if model not in ('CPM','ERNM','CNM','NNM'):
+		print "invalid model choose CPM, ERNM, CNM, or NNM"
+		model = raw_input('Enter Model: ')
+
+	print("Plateau lambda: "+str(plateau))
+
+	# Get number of communities from manual output file
+	comFile = open( "%s_AffCommunity.out" % (treeFile) , 'r' )
+	pattern = re.compile('Number of communities: (\d+)')
+	coms = int(reg_ex_match(comFile, pattern))
+	print("Number of communities: "+str(coms))
+
+	totalTrees = edit_treeset(treeFile)
+	treeFile = open(treeFile,'r')
+
+	# Make a file to count the frequency and relative frequency of trees in each community
+	treeCountFile = open("AffinityCommunitiesTreeCount.txt", 'w')
+
+	# Get the tree indices from each community
+	for i in range(1, coms+1):
+		pattern = re.compile('Community '+str(i)+' includes nodes: (.+)')
+		comStr = reg_ex_match(comFile, pattern)
+		comLs = comStr.split(",")
+		print("Trees in community "+str(i)+" : "+str(comLs))
+		comLs = filter(None, comLs)
+		# Pull out these trees from the original trees. Make a nexus file containing the trees for each community
+		comTreeSetStr = 'AffinityCom'+str(i)+'.nex'
+		comTreeSet = open(comTreeSetStr,'w')
+		treeCount = 0
+		treeFile.seek(0)
+		for line in treeFile:
+			# Print translate block to new community#.nex file
+			if line.find('[&U]') == -1 & line.find('[&R]') == -1:
+				comTreeSet.write(line)
+			else:
+				if line.find('[0]') != -1:
+					# Assuming that Treescaper counts from 0 and Nexus file counts from 0.
+					for j in comLs:
+						#print("j: "+str(j))
+						if line.find('['+str(j)+']') != -1:
+							print("line: "+str(line))
+							comTreeSet.write(line)
+							treeCount += 1
+				else:
+					# Adjust for Nexus file counting from 1. 
+					for j in comLs:
+						k = int(j) + 1
+						#print("j: "+str(j))
+						#print("k: "+str(k))
+						if line.find('['+str(k)+']') != -1:
+							#print("line: "+str(line))
+							comTreeSet.write(line)
+							treeCount += 1
+		# Write frequency and relative frequency of trees in the community
+		treeCountFile.write("%s\t%s\t%.2f%% of trees\n" % (comTreeSetStr, str(treeCount),100*(treeCount/totalTrees)))
+		comTreeSet.close()
+		# Make a consensus tree of the affinity community
+		comTreeConStr = comTreeSetStr + ".con"
+		if rooted == '0':
+			os.system("sumtrees.py -r --unrooted -o %s %s" % (comTreeConStr,comTreeSetStr))
+		if rooted == '1':
+			os.system("sumtrees.py -r --rooted -o %s %s &> dendropy_%s.out" % (comTreeConStr,comTreeSetStr,comTreeSetStr))
+		os.system("cat ./SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
+		#Make a pdf of the consensus tree
+		#os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
 	
 def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 
@@ -140,8 +213,7 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 		comKey.close()
 
 	if type == "Affinity":
-		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 1 " % (clvPath, treeSet, rooted, model, plateauLambda)+\
-		" > %s_AffPlateauCommunity.out" %  treeSetTrunc)#outputs community structure for current lambda values
+		affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
 
 
 def main():
@@ -203,24 +275,26 @@ def main():
 
 	if network == 'Affinity':
 
-		# Re-run Treescaper with manual plateau
-
-		os.system("%s -trees -f %s -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
+		# Run Treescaper with manual plateau
+		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
+		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Affinity -cm %s -lm manu -dm URF -am Exp -lp %s -ln 0 " % (clvPath, treeSet, rooted, model, plateau)+\
 		" > %s_AffCommunity.out" %  treeSet)
 
-		print("affinity plateau "+str(plateau))
+		# Run automatic plateau finder
+		print("Running automatic. Log file: %s_AffAuto.out" %  treeSet)
+		os.system("%s -trees -f %s -ft Trees -w 0 -r %s -o Community -t Affinity -cm %s -lm auto -dm URF -am Exp" % (clvPath, treeSet, rooted, model)+\
+		" > %s_AffAuto.out" %  treeSet)
 
-		# change file name. 
+		# Get output file from automatic run
 		aCar=glob.glob('%s*_Affinity-*community_auto_results.out' % (treeSetTrunc))
 
+		# Change name, might want to turn this into cp instead of mv
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 
+		print("Parse output into useful information")
 		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
-		
-		if plateau:
-			affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
 
- 	os.system("sumtrees.py -r -o %s.con %s" % (treeSetTrunc, inNexus))
+ 	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
 	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
  	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
 
