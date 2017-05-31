@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="fix new branch script"
+message="Adding figtree CLV and using in scripts"
 
 echo $message
 

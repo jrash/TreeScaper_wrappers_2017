@@ -363,9 +363,9 @@ def main():
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
  	endTime4 = time.time()
 
- 	# Add FigTree block to file, need to get CLVFigTree working
+ 	# Add FigTree block to file, make PDF
 	os.system("cat ./SeqSim/FigTreeBlock.txt >> %s.con" % (treeSetTrunc))
- 	#os.system("/Applications/FigTree/FigTree_v1.4.3/bin/figtree -graphic PDF all_trees.con all_trees.pdf")
+ 	os.system("./bin/figtree -graphic PDF all_trees.con all_trees.pdf")
  	#os.system("cat RAxML_bestTree.G1_gene* > RAxML_allTree.G1.tre")
 
 	os.system("echo 'treescaperWrapperKnownPlateau.py %s\n' >> commands.txt" % ' '.join(sys.argv[1:]))
