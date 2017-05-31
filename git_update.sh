@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="small edits"
+message="Adding figtree CLV and using in scripts"
 
 echo $message
 
