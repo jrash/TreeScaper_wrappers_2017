@@ -399,13 +399,14 @@ def main():
 	time3 = "File_Parsing:\t"+str(round(endTime3 - startTime3, 5))
 	time4 = "SumTree_inNexus:\t"+str(round(endTime4 - startTime4, 5))
 	timeAll = "Total_time:\t"+str(round(endTime - startTime, 5))
-	
+	timeTotal = round(endTime - startTime, 5)
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
+	
 	print("Info:")
 	print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
 	print("\n")
-	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,str(round(endTime - startTime, 5),rooted,w,ln_c,hf,lf,ln_a,dm,am))
+	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeTotal,rooted,w,ln_c,hf,lf,ln_a,dm,am))
 	print("Done")
 	print("\n")
 
