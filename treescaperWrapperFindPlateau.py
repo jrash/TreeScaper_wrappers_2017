@@ -85,6 +85,8 @@ def autoFindlambda(inOutFile):
 	manLamdba = np.mean(plat)
 	if manLamdba == 0:
 		manLamdba = np.mean([0,plat[1]])
+	print("The largest plateau is: "+str(plat)+"\n")
+	print("The chosen lambda value is: "+str(manLamdba)+"\n")
 	return manLamdba
 
 def edit_treeset(treeFileEditPath):
