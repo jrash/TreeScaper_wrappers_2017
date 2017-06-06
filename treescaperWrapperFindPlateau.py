@@ -83,6 +83,8 @@ def autoFindlambda(inOutFile):
 	# Pull out largest plateau and get lambda in middle of it. 
 	plat = [float(largePlateau[0]), float(largePlateau[1])]
 	manLamdba = np.mean(plat)
+	if manLamdba == 0:
+		manLamdba = np.mean([0,plat[1]])
 	return manLamdba
 
 def edit_treeset(treeFileEditPath):
@@ -127,13 +129,13 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		print "invalid model choose CPM, ERNM, CNM, or NNM"
 		model = raw_input('Enter Model: ')
 
-	print("Plateau lambda: "+str(plateau))
+	print("Plateau lambda: "+str(plateau)+"\n")
 
 	# Get number of communities from manual output file
 	comFile = open( "%s_AffCommunity.out" % (treeFile) , 'r' )
 	pattern = re.compile('Number of communities: (\d+)')
 	coms = int(reg_ex_match(comFile, pattern))
-	print("Number of communities: "+str(coms))
+	print("Number of communities: "+str(coms)+"\n")
 
 	totalTrees = edit_treeset(treeFile)
 	treeFile = open(treeFile,'r')
@@ -291,7 +293,8 @@ def main():
 	if network == 'Covariance':
 
 		# Run automatic plateau finder
-		print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
+		print("\n")
+		print("Running automatic. Log file: %s_CovAuto.out\n" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
@@ -303,7 +306,7 @@ def main():
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
+		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out\n" %  (plateau, treeSet))
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
@@ -314,7 +317,7 @@ def main():
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	print("Parse output into useful information")
+	 	print("Parse output into useful information\n")
 	 	startTime3 = time.time()
 	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
@@ -333,7 +336,7 @@ def main():
 		plateau = autoFindlambda(outFile)
 
 		# Run Treescaper with manual plateau
-		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
+		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out\n" %  (plateau, treeSet))
 		startTime1 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
 		" > %s_AffCommunity.out" %  treeSet)

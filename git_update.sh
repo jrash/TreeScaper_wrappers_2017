@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Scripts to set up runs on the cluster"
+message="Fixing issues with lambda being set to 0"
 
 echo $message
 
