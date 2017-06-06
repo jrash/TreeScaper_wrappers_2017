@@ -190,7 +190,7 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		os.system("cat ./SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
 		#Make a pdf of the consensus tree
 		#os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
-		return coms
+	return coms
 
 def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 	# Get info shit and output some files
@@ -241,6 +241,7 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 							pattern2 = re.compile("(.+) , "+str(k))
 							taxon = reg_ex_match(comFile, pattern2)
 							indices[indices.index(k)] = taxon
+				print("\n")
 				# Close temp file
 				comTempFile.close()
 				os.close(fh)
@@ -307,14 +308,13 @@ def main():
 		autoFind = autoFindlambda(outFile)
 		plateau = autoFind[0]
 		print("Largest plateau: "+str(autoFind[1]))
-		print("Lambda value: "+str(plateau))
+		print("Lambda value: "+str(plateau)+"\n")
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
 		print("Running manual Covariance...")
 		print("Log file: %s_CovCommunity.out" % treeSet)
-		print("Lambda = %s" % plateau)
-		print("\n")
+		print("Lambda value: %s" % plateau)
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
@@ -325,7 +325,7 @@ def main():
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	print("Parsing output into useful information: ")
+	 	print("Parsing output into useful information...")
 	 	startTime3 = time.time()
 	 	numCom = parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
@@ -403,10 +403,9 @@ def main():
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
 	print("Info:")
-	print("\n")
 	print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
-	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeAll,rooted,w,ln_c,hf,lf,ln_a,dm,am))
 	print("\n")
+	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,str(round(endTime - startTime, 5),rooted,w,ln_c,hf,lf,ln_a,dm,am))
 	print("Done")
 	print("\n")
 
