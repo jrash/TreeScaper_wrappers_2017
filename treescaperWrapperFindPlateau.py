@@ -129,7 +129,7 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		print "invalid model choose CPM, ERNM, CNM, or NNM"
 		model = raw_input('Enter Model: ')
 
-	print("Plateau lambda: "+str(plateau)+"\n")
+	#print("Plateau lambda: "+str(plateau)+"\n")
 
 	# Get number of communities from manual output file
 	comFile = open( "%s_AffCommunity.out" % (treeFile) , 'r' )
@@ -293,8 +293,8 @@ def main():
 	if network == 'Covariance':
 
 		# Run automatic plateau finder
-		print("Running automatic Covariance. Log file: %s_CovAuto.out" %  treeSet)
 		print("\n")
+		print("Running automatic Covariance. Log file: %s_CovAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
@@ -310,6 +310,7 @@ def main():
 		# Run manual plateau
 		# Outputs community structure for current lambda values
 		print("Running manual Covariance with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
+		print("\n")
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
@@ -321,7 +322,6 @@ def main():
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
 	 	print("Parsing output into useful information: ")
-	 	print("\n")
 	 	startTime3 = time.time()
 	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
@@ -340,7 +340,6 @@ def main():
 		outFile = "%s_CovAuto.out" %  treeSet
 		autoFind = autoFindlambda(outFile)
 		plateau = autoFind[0]
-		print("\n")
 		print("The largest plateau is: "+str(autoFind[1])+"\n")
 		print("The chosen lambda value is: "+str(plateau)+"\n")
 
@@ -358,8 +357,7 @@ def main():
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 
 		print("Parsing output into useful information: ")
-	 	print("\n")
-	 	
+
 		startTime3 = time.time()
 		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		endTime3 = time.time()
