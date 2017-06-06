@@ -85,9 +85,7 @@ def autoFindlambda(inOutFile):
 	manLamdba = np.mean(plat)
 	if manLamdba == 0:
 		manLamdba = np.mean([0,plat[1]])
-	print("The largest plateau is: "+str(plat)+"\n")
-	print("The chosen lambda value is: "+str(manLamdba)+"\n")
-	return manLamdba
+	return manLamdba,plat
 
 def edit_treeset(treeFileEditPath):
 	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
@@ -305,7 +303,10 @@ def main():
 
 	 	# Get middle of largest plateau
 		outFile = "%s_CovAuto.out" %  treeSet
-		plateau = autoFindlambda(outFile)
+		autoFind = autoFindlambda(outFile)
+		plateau = autoFind[0]
+		print("The largest plateau is: "+str(autoFind[1])+"\n")
+		print("The chosen lambda value is: "+str(plateau)+"\n")
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
@@ -336,8 +337,11 @@ def main():
 		endTime2 = time.time()
 
 		# Get middle of largest plateau
-		outFile = "%s_AffAuto.out" %  treeSet
-		plateau = autoFindlambda(outFile)
+		outFile = "%s_CovAuto.out" %  treeSet
+		autoFind = autoFindlambda(outFile)
+		plateau = autoFind[0]
+		print("The largest plateau is: "+str(autoFind[1])+"\n")
+		print("The chosen lambda value is: "+str(plateau)+"\n")
 
 		# Run Treescaper with manual plateau
 		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out\n" %  (plateau, treeSet))
