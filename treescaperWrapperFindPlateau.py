@@ -369,7 +369,9 @@ def main():
 
 
 	# Make consensus tree for inNexus
+	print("\n")
 	print("Building consensus tree for input file. Log file: dendropy_%s.out" %  treeSetTrunc)
+	print("\n")
  	startTime4 = time.time()
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
  	endTime4 = time.time()
@@ -393,6 +395,8 @@ def main():
 	
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
+	print("Done")
+	print("/n")
 
 if __name__=='__main__':
 	main()
