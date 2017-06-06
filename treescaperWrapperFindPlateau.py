@@ -241,12 +241,12 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 							pattern2 = re.compile("(.+) , "+str(k))
 							taxon = reg_ex_match(comFile, pattern2)
 							indices[indices.index(k)] = taxon
-				print("\n")
 				# Close temp file
 				comTempFile.close()
 				os.close(fh)
 				# Write taxon and frequency for bipartitions in communit
 				comKey.write("%s %s\n" % (indices,freq))
+			print("\n")
 			comKey.write("\n")
 		comKey.close()
 		return coms
@@ -325,7 +325,7 @@ def main():
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	print("Parsing output into useful information...")
+	 	print("\n"+"Parsing output into useful information...")
 	 	startTime3 = time.time()
 	 	numCom = parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
@@ -345,7 +345,7 @@ def main():
 		outFile = "%s_CovAuto.out" %  treeSet
 		autoFind = autoFindlambda(outFile)
 		plateau = autoFind[0]
-		print("The largest plateau is: "+str(autoFind[1])+"\n")
+		print("The largest plateau is: "+str(autoFind[1]))
 		print("The chosen lambda value is: "+str(plateau)+"\n")
 
 		# Run Treescaper with manual plateau
@@ -402,10 +402,10 @@ def main():
 	timeTotal = round(endTime - startTime, 5)
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
-	
+
 	print("Info:")
 	print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
-	print("\n")
+
 	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeTotal,rooted,w,ln_c,hf,lf,ln_a,dm,am))
 	print("Done")
 	print("\n")
