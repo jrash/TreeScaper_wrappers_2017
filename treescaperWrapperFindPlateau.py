@@ -3,7 +3,7 @@
 
 #### Input
 
-# Usage: treescaperWrapperFindPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] [PlateauLambda] 
+# Usage: treescaperWrapperFindPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] 
 # [model] can be CNM/CPM/ERNM/NNM
 # [network] can be Covariance/Affinity
 # See main() for additional CLVTreeScaper options
