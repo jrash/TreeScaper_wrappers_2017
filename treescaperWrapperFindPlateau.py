@@ -295,7 +295,7 @@ def main():
 	if network == 'Covariance':
 
 		# Run automatic plateau finder
-		print("Running automatic Covariance..."
+		print("Running automatic Covariance...")
 		print("Log file: %s_CovAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
@@ -311,7 +311,7 @@ def main():
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Running manual Covariance..."
+		print("Running manual Covariance...")
 		print("Log file: %s_CovCommunity.out" % treeSet)
 		print("Lambda = %s" % plateau)
 		print("\n")
@@ -334,7 +334,8 @@ def main():
 
 		# Run automatic plateau finder
 		print("\n")
-		print("Running automatic Affinity. Log file: %s_AffAuto.out" %  treeSet)
+		print("Running automatic Affinity...")
+		print("Log file: %s_AffAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm auto -dm %s -am %s" % (clvPath, treeSet, w, rooted, model, dm, am)+\
 		" > %s_AffAuto.out" %  treeSet)
@@ -348,7 +349,9 @@ def main():
 		print("The chosen lambda value is: "+str(plateau)+"\n")
 
 		# Run Treescaper with manual plateau
-		print("Running manual Affinity with lambda = %s. Log file: %s_AffCommunity.out\n" %  (plateau, treeSet))
+		print("Running manual Affinity...")
+		print("Log file: %s_AffCommunity.out" %  treeSet)
+		print("Lambda = %s" % (plateau))
 		startTime1 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
 		" > %s_AffCommunity.out" %  treeSet)
