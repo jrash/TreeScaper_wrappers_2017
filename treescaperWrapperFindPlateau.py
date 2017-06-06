@@ -296,7 +296,8 @@ def main():
 
 		# Run automatic plateau finder
 		print("\n")
-		print("Running automatic. Log file: %s_CovAuto.out\n" %  treeSet)
+		print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
+		print("\n")
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
@@ -308,7 +309,8 @@ def main():
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out\n" %  (plateau, treeSet))
+		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
+		print("\n")
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
@@ -319,7 +321,7 @@ def main():
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	print("Parse output into useful information\n")
+	 	print("Parse output into useful information")
 	 	startTime3 = time.time()
 	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
