@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Fixing issues with lambda being set to 0"
+message="Output formatting"
 
 echo $message
 

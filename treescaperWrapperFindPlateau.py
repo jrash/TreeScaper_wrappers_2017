@@ -293,8 +293,7 @@ def main():
 	if network == 'Covariance':
 
 		# Run automatic plateau finder
-		print("\n")
-		print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
+		print("Running automatic Covariance. Log file: %s_CovAuto.out" %  treeSet)
 		print("\n")
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
@@ -310,8 +309,7 @@ def main():
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
-		print("\n")
+		print("Running manual Covariance with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
@@ -322,7 +320,8 @@ def main():
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	print("Parse output into useful information")
+	 	print("Parsing output into useful information: ")
+	 	print("\n")
 	 	startTime3 = time.time()
 	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
@@ -330,7 +329,8 @@ def main():
 	if network == 'Affinity':
 
 		# Run automatic plateau finder
-		print("Running automatic. Log file: %s_AffAuto.out" %  treeSet)
+		print("\n")
+		print("Running automatic Affinity. Log file: %s_AffAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm auto -dm %s -am %s" % (clvPath, treeSet, w, rooted, model, dm, am)+\
 		" > %s_AffAuto.out" %  treeSet)
@@ -340,11 +340,12 @@ def main():
 		outFile = "%s_CovAuto.out" %  treeSet
 		autoFind = autoFindlambda(outFile)
 		plateau = autoFind[0]
+		print("\n")
 		print("The largest plateau is: "+str(autoFind[1])+"\n")
 		print("The chosen lambda value is: "+str(plateau)+"\n")
 
 		# Run Treescaper with manual plateau
-		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out\n" %  (plateau, treeSet))
+		print("Running manual Affinity with lambda = %s. Log file: %s_AffCommunity.out\n" %  (plateau, treeSet))
 		startTime1 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
 		" > %s_AffCommunity.out" %  treeSet)
@@ -356,7 +357,9 @@ def main():
 		# Change name, might want to turn this into cp instead of mv
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 
-		print("Parse output into useful information")
+		print("Parsing output into useful information: ")
+	 	print("\n")
+	 	
 		startTime3 = time.time()
 		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		endTime3 = time.time()
@@ -371,7 +374,6 @@ def main():
 	# Make consensus tree for inNexus
 	print("\n")
 	print("Building consensus tree for input file. Log file: dendropy_%s.out" %  treeSetTrunc)
-	print("\n")
  	startTime4 = time.time()
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
  	endTime4 = time.time()
@@ -396,7 +398,7 @@ def main():
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
 	print("Done")
-	print("/n")
+	print("\n")
 
 if __name__=='__main__':
 	main()
