@@ -190,7 +190,8 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		os.system("cat ./SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
 		#Make a pdf of the consensus tree
 		#os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
-	
+		return coms
+
 def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 	# Get info shit and output some files
 
@@ -247,9 +248,10 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 				comKey.write("%s %s\n" % (indices,freq))
 			comKey.write("\n")
 		comKey.close()
+		return coms
 	if type == "Affinity":
-		affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
-
+		coms = affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
+		return coms
 
 def main():
 	clvPath = sys.argv[1]
@@ -262,7 +264,7 @@ def main():
 	# Manually edit below values if needed. 
 	w = 0
 	# Covariance
-	ln_c = 1
+	ln_c = 0
 	hf = 0.95
 	lf = 0.05
 	# Affinity
@@ -293,8 +295,8 @@ def main():
 	if network == 'Covariance':
 
 		# Run automatic plateau finder
-		print("\n")
-		print("Running automatic Covariance. Log file: %s_CovAuto.out" %  treeSet)
+		print("Running automatic Covariance..."
+		print("Log file: %s_CovAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
@@ -304,12 +306,14 @@ def main():
 		outFile = "%s_CovAuto.out" %  treeSet
 		autoFind = autoFindlambda(outFile)
 		plateau = autoFind[0]
-		print("The largest plateau is: "+str(autoFind[1])+"\n")
-		print("The chosen lambda value is: "+str(plateau)+"\n")
+		print("Largest plateau: "+str(autoFind[1]))
+		print("Lambda value: "+str(plateau))
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Running manual Covariance with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
+		print("Running manual Covariance..."
+		print("Log file: %s_CovCommunity.out" % treeSet)
+		print("Lambda = %s" % plateau)
 		print("\n")
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
@@ -323,7 +327,7 @@ def main():
 
 	 	print("Parsing output into useful information: ")
 	 	startTime3 = time.time()
-	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+	 	numCom = parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
 
 	if network == 'Affinity':
@@ -359,7 +363,7 @@ def main():
 		print("Parsing output into useful information: ")
 
 		startTime3 = time.time()
-		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		numCom = parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		endTime3 = time.time()
 
 
@@ -395,6 +399,11 @@ def main():
 	
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
+	print("Info:")
+	print("\n")
+	print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
+	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeAll,rooted,w,ln_c,hf,lf,ln_a,dm,am))
+	print("\n")
 	print("Done")
 	print("\n")
 

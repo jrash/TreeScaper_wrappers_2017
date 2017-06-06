@@ -10,7 +10,7 @@
 #       # Settings for CLV
 #       w = 0
 #       # Covariance
-#       ln_c = 1
+#       ln_c = 0
 #       hf = 0.95
 #       lf = 0.05
 #       # Affinity
