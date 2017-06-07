@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-message="Cleaning up folder"
+message="Pull out updated plateau from out file"
 
 
 echo $message

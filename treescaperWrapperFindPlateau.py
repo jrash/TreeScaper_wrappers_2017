@@ -63,30 +63,33 @@ def reg_ex_match(file, pattern):
 
 def autoFindlambda(inOutFile):
 	# Currently pulls out largest plateau found in auto run. 
-	# Would be useful to also pull out all possibly plateaus. 
+	# Would be useful to also pull out all possibly plateaus.
+	# Double hashed out lines are used for previous builds of CLVTreescaper output files.  
 	largePlateau=[]
-	allPlateaus=[]
-	pattern = 'The found plateaus are:'
-	#pattern = 'Updated plateau:'
+	##pattern = 'The found plateaus are:'
+	pattern = 'Updated plateau:'
 	with open(inOutFile , 'r' ) as file:
 		for line in file:
 			if pattern in line:
-				# This pulls both the largest plateau, and a line containing all lambdas
-				# The second occurance isnt parse properly in this script. But keeping it for parsing later if needed.
-				a = (next(file,'').strip())
-				b = a.split(",")[0].strip("[")
-				c = a.split(",")[1].strip("]")
+				##a = (next(file,'').strip())
+				# Pull out line with updated plateau
+				lineParsed = line.split(":")
+				# Do some python gymnastics to pull out just the numbers
+				lowerBound = str(lineParsed[1].split(",")[0]).strip().strip("[")
+				upperBound = str(lineParsed[1].split(",")[1]).strip().strip("]")
+				##lowerBound = a.split(",")[0].strip("[")
+				##upperBound = a.split(",")[1].strip("]")
 				# Store both lines for later use
-				allPlateaus.append(a)
 				# Add first and second numbers
-				largePlateau.append(b)
-				largePlateau.append(c)
+				largePlateau.append(lowerBound)
+				largePlateau.append(upperBound)
 	# Pull out largest plateau and get lambda in middle of it. 
 	plat = [float(largePlateau[0]), float(largePlateau[1])]
-	manLamdba = np.mean(plat)
-	if manLamdba == 0:
-		manLamdba = np.mean([0,plat[1]])
-	return manLamdba,plat
+	manLambda = np.mean(plat)
+	if manLambda == 0:
+		manLambda = np.mean([0,plat[1]])
+	print(manLambda,plat)
+	#return manLamdba,plat
 
 def edit_treeset(treeFileEditPath):
 	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
