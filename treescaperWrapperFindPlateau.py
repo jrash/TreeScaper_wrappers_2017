@@ -88,8 +88,8 @@ def autoFindlambda(inOutFile):
 	manLambda = np.mean(plat)
 	if manLambda == 0:
 		manLambda = np.mean([0,plat[1]])
-	print(manLambda,plat)
-	#return manLamdba,plat
+	#print(manLambda,plat)
+	return manLamdba,plat
 
 def edit_treeset(treeFileEditPath):
 	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
