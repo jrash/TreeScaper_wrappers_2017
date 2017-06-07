@@ -67,6 +67,7 @@ def autoFindlambda(inOutFile):
 	largePlateau=[]
 	allPlateaus=[]
 	pattern = 'The found plateaus are:'
+	#pattern = 'Updated plateau:'
 	with open(inOutFile , 'r' ) as file:
 		for line in file:
 			if pattern in line:
