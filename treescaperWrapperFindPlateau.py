@@ -408,7 +408,7 @@ def main():
 	time3 = "File_Parsing:\t"+str(round(endTime3 - startTime3, 5))
 	time4 = "SumTree_inNexus:\t"+str(round(endTime4 - startTime4, 5))
 	timeAll = "Total_time:\t"+str(round(endTime - startTime, 5))
-	timeTotal = round(endTime - startTime, 5)
+	timeTotal = round(endTime -./g startTime, 5)
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
 
