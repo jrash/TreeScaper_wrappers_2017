@@ -291,6 +291,11 @@ def main():
 	treeSetIndex = treeSet.find(".")
 	treeSetTrunc = treeSet[:treeSetIndex]
 
+	# The following is specialized for my naming scheme
+	tips = treeSetTrunc.split("_")[0].strip("tip")
+	trees = treeSetTrunc.split("_")[1].strip("trees")
+	cloudRF = treeSetTrunc.split("_")[2]
+
 	# Open file for keeping track of time
 	timeFile = open( "%s_%s_Time.out" % (inNexus, network) , 'w' )
 
@@ -408,9 +413,12 @@ def main():
 	timeFile.close()
 
 	print("Info:")
-	print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
+	print("Eat,Name,Tips,Trees,Cloud_RF,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
 
-	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeTotal,rooted,w,ln_c,hf,lf,ln_a,dm,am))
+	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,tips,trees,cloudRF,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeTotal,rooted,w,ln_c,hf,lf,ln_a,dm,am))
+	#print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
+	#print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeTotal,rooted,w,ln_c,hf,lf,ln_a,dm,am))
+
 	print("Done")
 	print("\n")
 

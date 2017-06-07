@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-message="Pull out updated plateau from out file"
+message="Fussing with output file"
 
 
 echo $message
