@@ -1,6 +1,8 @@
 #!/bin/bash
 
-message="Adding figtree CLV and using in scripts"
+
+message="Cleaning up folder"
+
 
 echo $message
 

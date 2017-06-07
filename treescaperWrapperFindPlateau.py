@@ -3,7 +3,7 @@
 
 #### Input
 
-# Usage: treescaperWrapperFindPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] [PlateauLambda] 
+# Usage: treescaperWrapperFindPlateau.py [CLV path] [inputTrees.nex] [model] [network] [rooted] 
 # [model] can be CNM/CPM/ERNM/NNM
 # [network] can be Covariance/Affinity
 # See main() for additional CLVTreeScaper options
@@ -83,7 +83,9 @@ def autoFindlambda(inOutFile):
 	# Pull out largest plateau and get lambda in middle of it. 
 	plat = [float(largePlateau[0]), float(largePlateau[1])]
 	manLamdba = np.mean(plat)
-	return manLamdba
+	if manLamdba == 0:
+		manLamdba = np.mean([0,plat[1]])
+	return manLamdba,plat
 
 def edit_treeset(treeFileEditPath):
 	# Add comment blocks that number each tree with the indices used by TreeScaper. Pulled from AffinityCommunities.py
@@ -127,13 +129,13 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		print "invalid model choose CPM, ERNM, CNM, or NNM"
 		model = raw_input('Enter Model: ')
 
-	print("Plateau lambda: "+str(plateau))
+	#print("Plateau lambda: "+str(plateau)+"\n")
 
 	# Get number of communities from manual output file
 	comFile = open( "%s_AffCommunity.out" % (treeFile) , 'r' )
 	pattern = re.compile('Number of communities: (\d+)')
 	coms = int(reg_ex_match(comFile, pattern))
-	print("Number of communities: "+str(coms))
+	print("Number of communities: "+str(coms)+"\n")
 
 	totalTrees = edit_treeset(treeFile)
 	treeFile = open(treeFile,'r')
@@ -188,7 +190,8 @@ def affinityCommunityConsensus(clvPath,treeFile,model,plateau,rooted):
 		os.system("cat ./SeqSim/FigTreeBlock.txt >> %s" % (comTreeConStr))
 		#Make a pdf of the consensus tree
 		#os.system("figtree -graphic PDF %s %s.pdf" % (comTreeConStr, comTreeConStr))
-	
+	return coms
+
 def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLambda):
 	# Get info shit and output some files
 
@@ -243,11 +246,13 @@ def parse_output(clvPath, treeSet, treeSetTrunc, type, model, rooted, plateauLam
 				os.close(fh)
 				# Write taxon and frequency for bipartitions in communit
 				comKey.write("%s %s\n" % (indices,freq))
+			print("\n")
 			comKey.write("\n")
 		comKey.close()
+		return coms
 	if type == "Affinity":
-		affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
-
+		coms = affinityCommunityConsensus(clvPath, treeSet, model, plateauLambda, rooted)
+		return coms
 
 def main():
 	clvPath = sys.argv[1]
@@ -260,7 +265,7 @@ def main():
 	# Manually edit below values if needed. 
 	w = 0
 	# Covariance
-	ln_c = 1
+	ln_c = 0
 	hf = 0.95
 	lf = 0.05
 	# Affinity
@@ -291,7 +296,8 @@ def main():
 	if network == 'Covariance':
 
 		# Run automatic plateau finder
-		print("Running automatic. Log file: %s_CovAuto.out" %  treeSet)
+		print("Running automatic Covariance...")
+		print("Log file: %s_CovAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm auto -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, hf, lf)+\
 	 	" > %s_CovAuto.out" %  treeSet)
@@ -299,11 +305,16 @@ def main():
 
 	 	# Get middle of largest plateau
 		outFile = "%s_CovAuto.out" %  treeSet
-		plateau = autoFindlambda(outFile)
+		autoFind = autoFindlambda(outFile)
+		plateau = autoFind[0]
+		print("Largest plateau: "+str(autoFind[1]))
+		print("Lambda value: "+str(plateau)+"\n")
 
 		# Run manual plateau
 		# Outputs community structure for current lambda values
-		print("Running manual with lambda = %s. Log file: %s_CovCommunity.out" %  (plateau, treeSet))
+		print("Running manual Covariance...")
+		print("Log file: %s_CovCommunity.out" % treeSet)
+		print("Lambda value: %s" % plateau)
 		startTime1 = time.time()
 	 	os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Covariance -cm %s -lm manu -lp %s -ln %s -hf %s -lf %s" % (clvPath, treeSet, w, rooted, model, plateau, ln_c, hf, lf)+\
 	 	" > %s_CovCommunity.out" %  treeSet)
@@ -314,26 +325,33 @@ def main():
 	 	# Change name, might want to turn this into cp instead of mv
 	 	os.system("mv %s %s_CovWholeCommunity_results.out" % (str(cmCar[0]), treeSetTrunc))
 
-	 	print("Parse output into useful information")
+	 	print("\n"+"Parsing output into useful information...")
 	 	startTime3 = time.time()
-	 	parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
+	 	numCom = parse_output(clvPath, treeSet, treeSetTrunc, "Covariance", model, rooted, plateau)
 	 	endTime3 = time.time()
 
 	if network == 'Affinity':
 
 		# Run automatic plateau finder
-		print("Running automatic. Log file: %s_AffAuto.out" %  treeSet)
+		print("\n")
+		print("Running automatic Affinity...")
+		print("Log file: %s_AffAuto.out" %  treeSet)
 		startTime2 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm auto -dm %s -am %s" % (clvPath, treeSet, w, rooted, model, dm, am)+\
 		" > %s_AffAuto.out" %  treeSet)
 		endTime2 = time.time()
 
 		# Get middle of largest plateau
-		outFile = "%s_AffAuto.out" %  treeSet
-		plateau = autoFindlambda(outFile)
+		outFile = "%s_CovAuto.out" %  treeSet
+		autoFind = autoFindlambda(outFile)
+		plateau = autoFind[0]
+		print("The largest plateau is: "+str(autoFind[1]))
+		print("The chosen lambda value is: "+str(plateau)+"\n")
 
 		# Run Treescaper with manual plateau
-		print("Running manual with lambda = %s. Log file: %s_AffCommunity.out" %  (plateau, treeSet))
+		print("Running manual Affinity...")
+		print("Log file: %s_AffCommunity.out" %  treeSet)
+		print("Lambda = %s" % (plateau))
 		startTime1 = time.time()
 		os.system("%s -trees -f %s -ft Trees -w %s -r %s -o Community -t Affinity -cm %s -lm manu -dm %s -am %s -lp %s -ln %s " % (clvPath, treeSet, w, rooted, model, dm, am, plateau, ln_a)+\
 		" > %s_AffCommunity.out" %  treeSet)
@@ -345,9 +363,10 @@ def main():
 		# Change name, might want to turn this into cp instead of mv
 		os.system("mv %s %s_AffWholeCommunity_results.out" % (str(aCar[0]), treeSetTrunc))
 
-		print("Parse output into useful information")
+		print("Parsing output into useful information: ")
+
 		startTime3 = time.time()
-		parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
+		numCom = parse_output(clvPath, treeSet, treeSetTrunc, "Affinity", model, rooted, plateau)
 		endTime3 = time.time()
 
 
@@ -358,7 +377,8 @@ def main():
 
 
 	# Make consensus tree for inNexus
-	print("Building consensus tree for input file. Log file: dendropy_%s.out" %  treeSetTrunc)
+	print("Building consensus tree for input file...")
+	print("Dendropy log file: dendropy_%s.out" %  treeSetTrunc)
  	startTime4 = time.time()
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
  	endTime4 = time.time()
@@ -379,9 +399,16 @@ def main():
 	time3 = "File_Parsing:\t"+str(round(endTime3 - startTime3, 5))
 	time4 = "SumTree_inNexus:\t"+str(round(endTime4 - startTime4, 5))
 	timeAll = "Total_time:\t"+str(round(endTime - startTime, 5))
-	
+	timeTotal = round(endTime - startTime, 5)
 	timeFile.write("%s\n%s\n%s\n%s\n%s" % (time1, time2, time3, time4, timeAll))
 	timeFile.close()
+
+	print("Info:")
+	print("Eat,Name,Network,Model,Communities,Plateau_low,Plateau_highq,Lambda,Time,Rooted,Weighted,Fixed_Lambda_Cov,High_Freq,Low_Freq,Fixed_Lambda_Aff,Distance_Metric,Affinity_Transformation")
+
+	print("Tacos,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" % (treeSetTrunc,network,model,numCom,autoFind[1][0],autoFind[1][1],plateau,timeTotal,rooted,w,ln_c,hf,lf,ln_a,dm,am))
+	print("Done")
+	print("\n")
 
 if __name__=='__main__':
 	main()
