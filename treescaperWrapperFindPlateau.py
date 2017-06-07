@@ -377,8 +377,8 @@ def main():
 
 
 	# Make consensus tree for inNexus
-	print("\n")
-	print("Building consensus tree for input file. Log file: dendropy_%s.out" %  treeSetTrunc)
+	print("Building consensus tree for input file...")
+	print("Dendropy log file: dendropy_%s.out" %  treeSetTrunc)
  	startTime4 = time.time()
  	os.system("sumtrees.py -r -o %s.con %s &> dendropy_%s.out" % (treeSetTrunc, inNexus,inNexus))
  	endTime4 = time.time()

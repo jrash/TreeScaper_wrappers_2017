@@ -1,6 +1,6 @@
 #!/bin/bash
 
-message="Output formatting"
+message="Cleaning up folder"
 
 echo $message
 

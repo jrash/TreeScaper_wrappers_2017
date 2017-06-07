@@ -23,6 +23,9 @@ for t in glob.glob('*.nex'):
 	# Copy pbs to folder
 	newPbs = str(pbs.split(".")[0])+"_"+repName+".pbs"
 	os.system("cp %s %s" % (pbs,dirPath+"/"+newPbs))
+	os.system("cp -r bin %s" % (dirPath+"/"))
+	os.system("cp -r lib %s" % (dirPath+"/"))
+	os.system("cp -r SeqSim %s" % (dirPath+"/"))
 	os.chdir(dirPath)
 	with open(newPbs, "r+") as f:
 			filedata = f.read()
